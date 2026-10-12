@@ -100,8 +100,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--pine);outline:none}
 /* Grille de silhouettes */
 .mode{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:4px;gap:4px;margin-bottom:12px}
 .mode button{min-height:50px;border:0;border-radius:12px;background:transparent;font-weight:700;font-size:16px;cursor:pointer}
-.mode button[aria-pressed="true"][data-mode="now"]{background:var(--ink);color:var(--bg)}
-.mode button[aria-pressed="true"][data-mode="goal"]{background:var(--pine);color:var(--pine-ink)}
+.mode button[aria-pressed="true"][data-smode="now"]{background:var(--ink);color:var(--bg)}
+.mode button[aria-pressed="true"][data-smode="goal"]{background:var(--pine);color:var(--pine-ink)}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 @media (min-width:480px){.grid{grid-template-columns:repeat(4,1fr)}}
 .sil{position:relative;border:2px solid transparent;background:var(--surface);border-radius:14px;padding:22px 4px 8px;cursor:pointer;text-align:center;color:var(--sil);transition:border-color .15s}
@@ -725,6 +725,54 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
 .gear{width:44px;height:44px;border-radius:50%;border:0;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);flex:none;margin-left:4px}
 .gear svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .gear[aria-current="page"]{background:var(--pine-soft);color:var(--pine)}
+.acc{background:var(--surface);border-radius:18px;margin:0 0 12px;border:1.5px solid var(--line)}
+.acc>summary{list-style:none;cursor:pointer;min-height:64px;padding:12px 44px 12px 16px;display:flex;flex-direction:column;justify-content:center;gap:2px;position:relative}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary::after{content:"";position:absolute;right:20px;top:50%;width:10px;height:10px;border-right:3px solid var(--muted);border-bottom:3px solid var(--muted);transform:translateY(-70%) rotate(45deg);transition:transform .2s}
+.acc[open]>summary::after{transform:translateY(-30%) rotate(-135deg)}
+.acc[open]>summary{border-bottom:1px solid var(--line)}
+.acc-t{font-family:var(--display);font-stretch:80%;font-variation-settings:"wdth" 80;font-weight:800;font-size:21px;line-height:1.15}
+.acc-s{font-size:14px;color:var(--muted)}
+.acc-s.ok{color:var(--pine);font-weight:700}
+.acc-s.ok::before{content:"✓ "}
+.acc-s.todo{align-self:flex-start;background:var(--warn-bg);color:var(--warn-ink);font-weight:700;border-radius:999px;padding:1px 10px}
+.acc-b{padding:14px 16px 16px}
+.acc-b>section{margin:0}
+.acc-b>.hint:first-child{margin-top:0}
+#hWeek>h2:first-child,#hWeight>h2:first-child,#hKcal>h2:first-child{display:none}
+#view-profil .hero{margin-bottom:18px}
+.wizard .wl-in{padding-top:8px}
+.wzprog{display:grid;gap:6px;margin-bottom:22px;font-size:14px;color:var(--muted)}
+.wzbar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.wzbar i{display:block;height:100%;background:var(--pine);transition:width .3s}
+.wzt{font-family:var(--display);font-stretch:75%;font-variation-settings:"wdth" 75;font-weight:800;font-size:34px;line-height:1.05;margin:0 0 6px}
+.wzs{color:var(--muted);margin:0 0 20px}
+.wzf{display:grid;gap:10px}
+.wzl{font-weight:700;font-size:15px;margin-top:6px}
+.wzin{font-size:22px!important;min-height:62px!important}
+.wzrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wzbig{min-height:70px;font-size:18px}
+.wzcard{display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:70px}
+.wzcard small{font-weight:400;color:var(--muted);font-size:14px}
+.wzcard[aria-pressed="true"] small{color:inherit;opacity:.85}
+.wzchips .btn{min-height:46px;font-size:15px}
+.wzinfo{color:var(--muted);font-size:15px;margin:4px 0}
+.wzgrid .sil svg{height:96px}
+.wzgrid .sil{padding-top:22px}
+.wzhint{margin:0;font-size:16px}
+.wzsel{background:var(--surface);border-radius:14px;padding:10px 12px;font-size:15px;line-height:2}
+.wzsel .tag{font-style:normal;margin-right:6px}
+.wzmode button[data-mode2="now"][aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.wzmode button[data-mode2="goal"][aria-pressed="true"]{background:var(--pine);color:var(--pine-ink)}
+.wznav{position:sticky;bottom:0;display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-top:24px;padding:12px 0 calc(env(safe-area-inset-bottom,0px) + 4px);background:var(--bg)}
+.wznav .btn{min-height:58px;font-size:17px}
+.wznav .btn:disabled{opacity:.4}
+.wzplan{background:var(--ink);color:var(--bg);border-radius:22px;padding:18px;text-align:center}
+.wzplan span{opacity:.85}
+.wzplan>b{display:block;font-family:var(--display);font-stretch:72%;font-variation-settings:"wdth" 72;font-weight:800;font-size:56px;line-height:1.05}
+.wzm{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;font-size:13px}
+.wzm b{display:block;font-size:20px}
+.wzplan p{margin:10px 0 0;opacity:.9}
 .scanbtn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:60px;font-size:18px}
 .scanbtn svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .scanov{position:fixed;inset:0;z-index:60;background:#000;display:flex;align-items:center;justify-content:center}
@@ -776,21 +824,9 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
     <p class="coach" id="heroCoach" aria-live="polite"></p>
   </div>
 
-  <section aria-labelledby="h-mode">
-    <h2 id="h-mode">Mode de l’application</h2>
-    <p class="hint">Choisis le niveau d’exigence de ton coach. Tu peux en changer quand tu veux.</p>
-    <div id="modeBox"></div>
-  </section>
 
-  <section aria-labelledby="h-tone">
-    <h2 id="h-tone">Comment veux-tu que je te parle ?</h2>
-    <p class="hint">Ça change le ton de tous mes messages et analyses dans l’app. Tu peux en changer quand tu veux. Même en mode direct, je ne te manquerai jamais de respect.</p>
-    <div class="tone3" id="toneBtns" role="group" aria-labelledby="h-tone"></div>
-    <p class="toneex" id="toneEx"></p>
-  </section>
 
-  <section aria-labelledby="h-id">
-    <h2 id="h-id">Qui es-tu ?</h2>
+  <details class="acc" id="acc-h-id"><summary><span class="acc-t" id="h-id">Qui es-tu ?</span><span class="acc-s" id="accs-h-id"></span></summary><div class="acc-b">
     <p class="hint">Le sexe et l'âge changent le calcul de ta dépense d'énergie.</p>
     <div class="field"><label for="name">Prénom ou pseudo</label><input type="text" id="name" data-bind="name" autocomplete="given-name" maxlength="40"></div>
     <div class="field"><span class="label" id="sexLbl">Sexe</span>
@@ -800,10 +836,9 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
       </div>
     </div>
     <div class="field" data-f="age"><label for="age">Âge</label><div class="unit"><input id="age" inputmode="numeric" data-bind="age" data-num="14,120"><span>ans</span></div><div class="err"></div></div>
-  </section>
+  </div></details>
 
-  <section aria-labelledby="h-body">
-    <h2 id="h-body">Ton corps</h2>
+  <details class="acc" id="acc-h-body"><summary><span class="acc-t" id="h-body">Ton corps</span><span class="acc-s" id="accs-h-body"></span></summary><div class="acc-b">
     <p class="hint">Pèse-toi le matin, à jeun, après être passé·e aux toilettes : c'est le chiffre le plus stable.</p>
     <div class="field" data-f="height"><label for="height">Taille</label><div class="unit"><input id="height" inputmode="decimal" data-bind="height" data-num="any"><span>cm</span></div><div class="err"></div></div>
     <div class="row">
@@ -811,23 +846,21 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
       <div class="field" data-f="target"><label for="target">Poids cible</label><div class="unit"><input id="target" inputmode="decimal" data-bind="target" data-num="any"><span>kg</span></div><div class="err"></div></div>
     </div>
     <div id="bodyWarn"></div>
-  </section>
+  </div></details>
 
-  <section aria-labelledby="h-sil">
-    <h2 id="h-sil">Ta silhouette</h2>
+  <details class="acc" id="acc-h-sil"><summary><span class="acc-t" id="h-sil">Ta silhouette</span><span class="acc-s" id="accs-h-sil"></span></summary><div class="acc-b">
     <p class="hint">Choisis celle qui te ressemble le plus aujourd'hui, puis celle que tu vises. Pas besoin d'être exact : c'est un repère visuel.</p>
     <div class="mode" role="group" aria-label="Que choisis-tu ?">
-      <button type="button" data-mode="now" aria-pressed="true">Aujourd'hui</button>
-      <button type="button" data-mode="goal" aria-pressed="false">Mon objectif</button>
+      <button type="button" data-smode="now" aria-pressed="true">Aujourd'hui</button>
+      <button type="button" data-smode="goal" aria-pressed="false">Mon objectif</button>
     </div>
     <div class="grid" id="grid"></div>
     <div class="selinfo" id="selInfo" aria-live="polite"></div>
     <p class="note" id="bfNote">Le pourcentage sous chaque silhouette est une estimation de masse grasse, à titre indicatif seulement.</p>
     <div id="silWarn"></div>
-  </section>
+  </div></details>
 
-  <section aria-labelledby="h-work">
-    <h2 id="h-work">Ton travail</h2>
+  <details class="acc" id="acc-h-work"><summary><span class="acc-t" id="h-work">Ton travail</span><span class="acc-s" id="accs-h-work"></span></summary><div class="acc-b">
     <p class="hint">En dehors du sport, comment se passe ta journée type ?</p>
     <div class="work">
       <button type="button" class="workcard" data-work="sedentaire" aria-pressed="false">
@@ -847,11 +880,10 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
       </button>
     </div>
     <p class="note">Pas sûr·e ? Ton téléphone compte sûrement tes pas (Google Fit, Samsung Health…). Regarde ta moyenne sur une semaine de travail, sans compter tes séances de sport.</p>
-  </section>
+  </div></details>
 
 
-  <section aria-labelledby="h-plan">
-    <h2 id="h-plan">Ton plan</h2>
+  <details class="acc" id="acc-h-plan"><summary><span class="acc-t" id="h-plan">Ton plan</span><span class="acc-s" id="accs-h-plan"></span></summary><div class="acc-b">
     <p class="hint">Calculé à partir de ton profil, il se met à jour tout seul. Ces objectifs alimentent les jauges de ton journal.</p>
     <span class="label" id="kmLbl">Ton objectif calorique</span>
     <div class="seg" role="group" aria-labelledby="kmLbl">
@@ -860,10 +892,32 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
     </div>
     <div class="field kcalf" id="kcalWrap" hidden><label for="planKcal">Ma cible par jour</label><div class="unit"><input id="planKcal" inputmode="numeric" placeholder="ex. 3500"><span>kcal</span></div><div class="err"></div><p class="small" id="kcalHint" style="margin:6px 0 0"></p></div>
     <div id="plan" style="margin-top:14px"></div>
-  </section>
+  </div></details>
 
-  <section aria-labelledby="h-save">
-    <h2 id="h-save">Sauvegarde</h2>
+  <button class="btn ghost" type="button" data-wz="restart" style="width:100%;margin-top:8px">Refaire la configuration guidée</button>
+</div>
+<div id="view-journal" hidden></div>
+<div id="view-jeune" hidden></div>
+<div id="view-bilan" hidden></div>
+<div id="view-sport" hidden></div>
+<div id="view-param" hidden>
+  <h1 class="vtitle">Paramètres</h1>
+  <details class="acc" id="acc-h-mode"><summary><span class="acc-t" id="h-mode">Mode de l’application</span><span class="acc-s" id="accs-h-mode"></span></summary><div class="acc-b">
+    <p class="hint">Choisis le niveau d’exigence de ton coach. Tu peux en changer quand tu veux.</p>
+    <div id="modeBox"></div>
+  </div></details>
+  <details class="acc" id="acc-h-tone"><summary><span class="acc-t" id="h-tone">Comment veux-tu que je te parle ?</span><span class="acc-s" id="accs-h-tone"></span></summary><div class="acc-b">
+    <p class="hint">Ça change le ton de tous mes messages et analyses dans l’app. Tu peux en changer quand tu veux. Même en mode direct, je ne te manquerai jamais de respect.</p>
+    <div class="tone3" id="toneBtns" role="group" aria-labelledby="h-tone"></div>
+    <p class="toneex" id="toneEx"></p>
+  </div></details>
+  <details class="acc" id="acc-h-restr"><summary><span class="acc-t" id="h-restr">Tes restrictions alimentaires</span><span class="acc-s" id="accs-h-restr"></span></summary><div class="acc-b">
+    <p class="hint">Coche ce qui te concerne : ton coach en tiendra compte dans ses idées de repas et ses conseils.</p>
+    <div class="chips restr" id="restrChips" role="group" aria-labelledby="h-restr"></div>
+    <div class="field" style="margin-top:12px"><label for="restrOther">Autre (facultatif)</label><input type="text" id="restrOther" data-bind="restrOther" maxlength="80" placeholder="ex. pas de champignons"></div>
+    <p class="note">En cas d’allergie, lis toujours les étiquettes : mes suggestions ne remplacent pas l’avis d’un médecin ou d’un allergologue.</p>
+  </div></details>
+  <details class="acc" id="acc-h-save"><summary><span class="acc-t" id="h-save">Sauvegarde</span><span class="acc-s" id="accs-h-save"></span></summary><div class="acc-b">
     <p class="hint">Tout est enregistré sur ce téléphone. Télécharge une sauvegarde chaque semaine et range-la dans Google Drive ou envoie-la-toi par mail : avec ce fichier, tu récupères tout sur un nouveau téléphone.</p>
     <div class="backup" id="backup">
       <button class="btn primary" type="button" data-bk="dl">Télécharger ma sauvegarde (fichier)</button>
@@ -877,21 +931,7 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
       <button class="btn danger" type="button" id="wipeBtn">Effacer toutes mes données</button>
       <div class="confirm" id="wipeConfirm"><button class="btn danger" type="button" id="wipeYes">Oui, tout effacer</button><button class="btn ghost" type="button" id="wipeNo">Annuler</button></div>
     </div>
-  </section>
-</div>
-<div id="view-journal" hidden></div>
-<div id="view-jeune" hidden></div>
-<div id="view-bilan" hidden></div>
-<div id="view-sport" hidden></div>
-<div id="view-param" hidden>
-  <h1 class="vtitle">Paramètres</h1>
-  <section aria-labelledby="h-restr">
-    <h2 id="h-restr">Tes restrictions alimentaires</h2>
-    <p class="hint">Coche ce qui te concerne : ton coach en tiendra compte dans ses idées de repas et ses conseils.</p>
-    <div class="chips restr" id="restrChips" role="group" aria-labelledby="h-restr"></div>
-    <div class="field" style="margin-top:12px"><label for="restrOther">Autre (facultatif)</label><input type="text" id="restrOther" data-bind="restrOther" maxlength="80" placeholder="ex. pas de champignons"></div>
-    <p class="note">En cas d’allergie, lis toujours les étiquettes : mes suggestions ne remplacent pas l’avis d’un médecin ou d’un allergologue.</p>
-  </section>
+  </div></details>
 </div>
 <div id="view-saisie" hidden>
   <h1 class="vtitle">Tes mesures</h1>
@@ -913,19 +953,14 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
 </div>
 <div id="view-mesures" hidden>
   <h1 class="vtitle">Ton suivi</h1>
-  <nav class="jumpnav" aria-label="Aller à"><a class="btn" href="#h-wk">Semaine</a><a class="btn" href="#h-w">Poids</a><a class="btn" href="#h-k">Calories</a><a class="btn" href="#h-whr">Mesures</a></nav>
-  <section id="hWeek" aria-labelledby="h-wk"></section>
-  <section id="hWeight" aria-labelledby="h-w"></section>
-  <section id="hKcal" aria-labelledby="h-k"></section>
-  <section aria-labelledby="h-whr">
-    <h2 id="h-whr">Rapport taille / hanches</h2>
+    <details class="acc" open id="sacc-sw"><summary><span class="acc-t">Ta semaine</span><span class="acc-s" id="accs-sw"></span></summary><div class="acc-b"><section id="hWeek" aria-labelledby="h-wk"></section></div></details>
+  <details class="acc" id="sacc-sp"><summary><span class="acc-t">Ton poids</span><span class="acc-s" id="accs-sp"></span></summary><div class="acc-b"><section id="hWeight" aria-labelledby="h-w"></section></div></details>
+  <details class="acc" id="sacc-sk"><summary><span class="acc-t">Tes calories</span><span class="acc-s" id="accs-sk"></span></summary><div class="acc-b"><section id="hKcal" aria-labelledby="h-k"></section></div></details>
+  <details class="acc" id="sacc-sm"><summary><span class="acc-t" id="h-whr">Mensurations : taille / hanches</span><span class="acc-s" id="accs-sm"></span></summary><div class="acc-b"><section>
     <div id="whr"></div>
     <div id="sym" style="margin-top:12px"></div>
-  </section>
-  <section aria-labelledby="h-hist">
-    <h2 id="h-hist">Historique des mensurations</h2>
-    <div id="hist"></div>
-  </section>
+  </section></div></details>
+  <details class="acc" id="sacc-sh"><summary><span class="acc-t" id="h-hist">Historique des mensurations</span><span class="acc-s" id="accs-sh"></span></summary><div class="acc-b"><section><div id="hist"></div></section></div></details>
 </div>
 </main>
 
@@ -955,6 +990,7 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
     <p class="small">Tu pourras changer de mode à tout moment dans ton profil.</p>
   </div>
 </div>
+<div class="welcome wizard" id="wizard" hidden><div class="wl-in" id="wzBody"></div></div>
 <div class="sheet-bg" id="sheetBg" hidden></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
   <div class="sheet-head"><h3 id="sheetTitle"></h3><button type="button" class="x" data-act="close" aria-label="Fermer">×</button></div>
@@ -1120,12 +1156,12 @@ function renderGrid(){
   for(var i=0;i<12;i++){
     var L=LEVELS[i],isN=p.bodyNow===i,isG=p.bodyGoal===i,cls='sil'+(isN?' is-now':'')+(isG?' is-goal':''),bf=adv()?L.bf[F?1:0]:'';
     h+='<button type="button" class="'+cls+'" data-level="'+i+'" aria-label="'+L.n+'. '+L.d+(bf?' Environ '+bf+' de masse grasse.':'')+(isN?' Choisie pour aujourd\u2019hui.':'')+(isG?' Choisie comme objectif.':'')+'">'+
-      '<span class="tags">'+(isN?'<i class="tag n">Moi</i>':'')+(isG?'<i class="tag g">Objectif</i>':'')+'</span>'+
+      '<span class="tags">'+(isN?'<i class="tag n">Aujourd\u2019hui</i>':'')+(isG?'<i class="tag g">Objectif</i>':'')+'</span>'+
       '<svg viewBox="-42 2 84 196" aria-hidden="true">'+body(i,sex())+'</svg><span class="nm">'+L.n+'</span><span class="bf">'+bf+'</span></button>';
   }
   $('grid').innerHTML=h;
   $('bfNote').hidden=!adv();
-  document.querySelectorAll('.mode button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mode===mode));});
+  document.querySelectorAll('#view-profil .mode button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.smode===mode));});
   var info='';
   if(p.bodyNow!==null)info+='<p><b>Aujourd\u2019hui : '+LEVELS[p.bodyNow].n+'.</b> '+LEVELS[p.bodyNow].d+'</p>';
   if(p.bodyGoal!==null)info+='<p><b>Objectif : '+LEVELS[p.bodyGoal].n+'.</b> '+LEVELS[p.bodyGoal].d+'</p>';
@@ -1185,6 +1221,7 @@ function renderCompletion(){
   var n=checks.filter(Boolean).length,pc=Math.round(n/checks.length*100);
   $('pct').textContent=pc+' %';$('pctbar').style.width=pc+'%';
   renderPlan();
+  renderAcc();
 }
 function renderLastSave(){
   $('lastSave').textContent=state.updated?'Dernier enregistrement : '+new Date(state.updated).toLocaleString('fr-FR',{dateStyle:'medium',timeStyle:'short'}):'';
@@ -1226,6 +1263,7 @@ document.addEventListener('focusin',function(e){var k=e.target.dataset&&e.target
 document.addEventListener('click',function(e){
   var t=e.target.closest('button,[data-m]');if(!t)return;
   if(t.dataset.view){showView(t.dataset.view);return;}
+  if(t.dataset.wz){if(t.dataset.wz==='restart'){openWizard(0);return;}wzAction(t);return;}
   if(t.dataset.bk){downloadBackup();return;}
   if(t.dataset.scan){closeScanner();return;}
   if(t.dataset.mode){modeAction(t);return;}
@@ -1248,7 +1286,7 @@ document.addEventListener('click',function(e){
   var p=state.profile;
   if(t.dataset.sex){p.sex=t.dataset.sex;renderSexWork();renderGrid();renderHero();renderDiagram();renderCompletion();save();}
   else if(t.dataset.work){p.work=t.dataset.work;renderSexWork();renderCompletion();save();}
-  else if(t.dataset.mode){mode=t.dataset.mode;renderGrid();}
+  else if(t.dataset.smode){mode=t.dataset.smode;renderGrid();}
   else if(t.dataset.level!==undefined){
     var lv=Number(t.dataset.level);
     if(mode==='now'){p.bodyNow=lv;toast('Silhouette actuelle : '+LEVELS[lv].n);if(p.bodyGoal===null)mode='goal';}
@@ -2166,7 +2204,14 @@ function sportWeekHTML(d,plan0){
 }
 function renderWeek(){var b=$('hWeek');if(!b)return;var p0=computePlan();
   b.innerHTML='<h2 id="h-wk">Ta semaine</h2>'+(p0.miss?'<p class="hint">Complète ton profil pour voir ta semaine.</p>':weekNutHTML(today(),p0).replace('<h2 class="bh">Ta semaine</h2>','<h2 class="bh">Ta nutrition</h2>')+sportWeekHTML(today(),p0));}
-function renderSuivi(){renderWeek();renderWeightHist();renderKcalHist();renderWHR();renderSym();renderHist();}
+function renderSuiviSums(){
+  var wk=weekDates(today()).filter(function(x){return x<=today();}),n=wk.filter(logged).length;setAcc('sw',n+' jour'+(n>1?'s':'')+' noté'+(n>1?'s':''),null);
+  var W=wLogs();setAcc('sp',W.length?fmt(W[W.length-1].kg)+' kg':'Aucune pesée',null);
+  var d7=[];for(var i=0;i<7;i++){var d=shiftD(today(),-i);if(logged(d))d7.push(sum(dayAll(d)).k);}setAcc('sk',d7.length?'≈ '+nf(d7.reduce(function(a,b){return a+b;},0)/d7.length)+' kcal / jour':'Aucun jour noté',null);
+  var x=whrInfo();setAcc('sm',x?String(x.r).replace('.',',')+', zone '+ZONES[x.zone][0].toLowerCase():'À mesurer',null);
+  setAcc('sh',state.logs.measures.length+' relevé'+(state.logs.measures.length>1?'s':''),null);
+}
+function renderSuivi(){renderSuiviSums();renderWeek();renderWeightHist();renderKcalHist();renderWHR();renderSym();renderHist();}
 
 /* =====================================================
    SYNTHÈSE DU PROFIL (en tête du journal)
@@ -2577,7 +2622,7 @@ function renderBilan(){
     var sc=dayScore(t,pl,day.water);
     h+='<div class="bcard score"><div class="sring">'+scoreRing(sc.s)+'<div class="ctr"><b>'+sc.s+'</b><span>sur 100</span></div></div><div><p class="slbl">'+scoreLbl(sc.s)+'</p>'+(prov?'<p class="small">Bilan provisoire : ta journée n\u2019est pas finie'+(left.length?' ('+listFr(left.map(function(m){return m[3];}))+' à venir)':'')+'.</p>':'')+'</div></div>';
     h+='<ul class="crit">'+sc.c.map(function(x){var cls=x.pts===x.max?'ok':x.pts>=x.max/2?'mid':'low';return '<li class="'+cls+'"><span>'+x.lbl+'</span><b>'+x.pts+' / '+x.max+'</b></li>';}).join('')+'</ul>';
-    h+='<div class="bcard"><h2 class="bh">Ta journée en chiffres</h2><div class="mbars">'+
+    h+='<div class="bcard" data-acc="1" data-sum="'+nf(t.k)+' / '+nf(pl.kcal)+' kcal"><h2 class="bh">Ta journée en chiffres</h2><div class="mbars">'+
       mbRow('Calories',t.k,pl.kcal,'var(--pine)','kcal')+mbRow('Protéines',t.p,pl.p,'var(--prot)','g')+mbRow('Glucides',t.g,pl.g,'var(--carb)','g')+mbRow('Lipides',t.l,pl.l,'var(--fat)','g')+mbRow('Fibres',t.fi,pl.fi,'var(--fib)','g')+
       mbRow('Eau',day.water/1000,pl.water/1000,'var(--water)','L')+'</div>'+
       '<p class="sublbl">À limiter</p><div class="mbars lim">'+mbRow('Gras saturés',t.ags,pl.sat,'var(--muted)','g',true)+mbRow('Sucres',t.suc,pl.sug,'var(--muted)','g',true)+mbRow('Sel',t.sel,pl.salt,'var(--muted)','g',true)+'</div>';
@@ -2592,6 +2637,7 @@ function renderBilan(){
   h+=tomorrowHTML(d,plan0,t,pl,day,logged(d));
   h+='<p class="small">Ces conseils sont des repères simples basés sur tes objectifs, pas un avis médical. Pour une pathologie ou un doute, demande l\u2019avis d\u2019un médecin ou d\u2019un diététicien.</p>';
   box.innerHTML=h;
+  accify(box);
   runMotiv(scM);
 }
 function weekChart(wk,plan0,cur){
@@ -2629,7 +2675,7 @@ function tomorrowHTML(d,plan0,t,pl,day,hasData){
   var lw=lastWeightDays();
   if(lw===null||lw>=7)todo.push(TN({sec:'Pesée demain matin, à jeun. Obligatoire.',std:'Pèse-toi demain matin, à jeun, après être passé·e aux toilettes, et note-la dans l\u2019onglet Mesures.',doux:'Si tu en as envie, pèse-toi demain matin à jeun, ça nous aidera à suivre tes progrès.'}));
   avoid.push(TN({sec:'Te peser 5 fois par jour. Le poids varie naturellement d\u2019environ 1 kg : on juge la tendance, pas un chiffre.',std:'T\u2019inquiéter d\u2019une variation sur la balance : le poids bouge naturellement d\u2019environ 1 kg d\u2019un jour à l\u2019autre.',doux:'Te soucier d\u2019une variation sur la balance : c\u2019est normal que le poids bouge d\u2019environ 1 kg d\u2019un jour à l\u2019autre.'}));
-  var h='<div class="bcard"><h2 class="bh">Ton plan pour demain</h2><p class="small">'+parseD(tm).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})+(p2.adj?', objectif ajusté par ton rattrapage':'')+'.</p>'+
+  var h='<div class="bcard" data-acc="1" data-sum="'+nf(p2.kcal)+' kcal"><h2 class="bh">Ton plan pour demain</h2><p class="small">'+parseD(tm).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})+(p2.adj?', objectif ajusté par ton rattrapage':'')+'.</p>'+
     '<div class="tplan">'+MEALS.filter(function(m){return S[m[0]]>0;}).map(function(m){return '<div><span>'+mealTime(m[0])+'</span><b>'+m[1]+'</b><em>≈ '+nf(p2.kcal*S[m[0]])+' kcal, '+nf(p2.p*S[m[0]])+' g de protéines</em></div>';}).join('')+'</div>'+
     '<p class="small">Total : '+nf(p2.kcal)+' kcal, '+p2.p+' g de protéines, '+p2.g+' g de glucides, '+p2.l+' g de lipides, '+fmt(p2.water/1000)+' L d\u2019eau.</p>'+
     '<div class="dd"><div class="do"><b>'+TN({sec:'Tes ordres pour demain',std:'À faire demain',doux:'Ce que je te conseille'})+'</b><ul>'+todo.slice(0,5).map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
@@ -2943,9 +2989,9 @@ function renderSport(){
       (obj&&obj!==s.obj?'<em>D\u2019après tes répétitions, ça ressemble plutôt à : '+SP_OBJ.filter(function(o){return o[0]===obj;})[0][1].toLowerCase()+'</em>':'')+'</button>';}).join('');
   if(spEdit)h+=spEditorHTML();
   else h+='<button class="btn primary big" type="button" data-sp="add" style="margin-bottom:24px">Ajouter une séance</button>';
-  h+='<section aria-labelledby="h-sptypes"><h2 id="h-sptypes">Comprendre les types de séance</h2>'+SP_OBJ.map(function(o){return '<div class="tip"><b>'+o[1]+' : '+o[2].toLowerCase()+'</b>'+o[3]+'</div>';}).join('')+
+  h+='<details class="acc"><summary><span class="acc-t" id="h-sptypes">Comprendre les types de séance</span><span class="acc-s">Hypertrophie, force…</span></summary><div class="acc-b">'+SP_OBJ.map(function(o){return '<div class="tip"><b>'+o[1]+' : '+o[2].toLowerCase()+'</b>'+o[3]+'</div>';}).join('')+
     '<p class="small">Ton « max », c\u2019est la charge la plus lourde que tu peux soulever une seule fois sur un exercice. Pour le cardio, le ressenti suffit : si tu ne peux plus parler, c\u2019est très difficile.</p>'+
-    '<details class="calc"><summary><span>Comment je calcule la dépense</span><span></span></summary><p><b>Estimation (●○○)</b> : type de séance, durée et ressenti. Chaque activité a une valeur MET (combien de fois ta dépense au repos elle demande), tirée des tables scientifiques de référence (Compendium des activités physiques). Je retire ta dépense de repos, déjà comptée dans ton plan.</p><p><b>Détaillée (●●○)</b> : avec tes parties du corps (séries, répétitions, repos), je calcule le temps d\u2019effort et de repos, la taille des muscles travaillés (jambes et dos dépensent bien plus que biceps ou mollets) et l\u2019intensité d\u2019après ton ressenti. Avec une fréquence cardiaque moyenne, j\u2019utilise une formule qui tient compte de ton âge, ton poids et ton sexe.</p><p><b>Montre (●●●)</b> : si ta montre affiche les kcal actives, je les reprends telles quelles.</p><p class="small">Toutes ces méthodes restent des estimations (à 15 à 25 % près). La section « Ta dépense réelle » de l\u2019onglet Suivi corrige le tir avec l\u2019évolution de ton poids.</p></details></section>';
+    '<details class="calc"><summary><span>Comment je calcule la dépense</span><span></span></summary><p><b>Estimation (●○○)</b> : type de séance, durée et ressenti. Chaque activité a une valeur MET (combien de fois ta dépense au repos elle demande), tirée des tables scientifiques de référence (Compendium des activités physiques). Je retire ta dépense de repos, déjà comptée dans ton plan.</p><p><b>Détaillée (●●○)</b> : avec tes parties du corps (séries, répétitions, repos), je calcule le temps d\u2019effort et de repos, la taille des muscles travaillés (jambes et dos dépensent bien plus que biceps ou mollets) et l\u2019intensité d\u2019après ton ressenti. Avec une fréquence cardiaque moyenne, j\u2019utilise une formule qui tient compte de ton âge, ton poids et ton sexe.</p><p><b>Montre (●●●)</b> : si ta montre affiche les kcal actives, je les reprends telles quelles.</p><p class="small">Toutes ces méthodes restent des estimations (à 15 à 25 % près). La section « Ta dépense réelle » de l\u2019onglet Suivi corrige le tir avec l\u2019évolution de ton poids.</p></details></div></details>';
   $('view-sport').innerHTML=h;
 }
 var habOpen=false,SPORT_OPTS=[['','Choisir…'],['muscu','Musculation'],['gym','Gym / fitness (cours collectifs)'],['natation','Natation'],['course','Course à pied'],['velo','Vélo'],['combat','Sports de combat'],['collectif','Sports collectifs (foot, basket…)'],['marche','Marche / randonnée'],['yoga','Yoga / pilates'],['aucun','Pas de sport pour l\u2019instant'],['autre','Autre']];
@@ -3045,7 +3091,7 @@ function sportNote(plan){if(!realMode())return ' Sport compté : moyenne de '+nf
 function bilanSportHTML(d,plan0){
   if(plan0.miss)return '';
   var L=spList(d),real=realMode(),dp=dayPlan(plan0,d),tot=L.reduce(function(a,s){return a+sessKcal(s).k;},0),isToday=d===today();
-  var h='<div class="bcard"><h2 class="bh">Ton sport</h2>';
+  var h='<div class="bcard" data-acc="1" data-sum="'+(L.length?L.length+' séance'+(L.length>1?'s':'')+', '+nf(tot)+' kcal':'Jour de repos')+'"><h2 class="bh">Ton sport</h2>';
   // la journée
   if(L.length){
     h+=L.map(function(s){var c=sessKcal(s);return '<div class="bsess"><span><b>'+spTitle(s)+'</b><small>'+(c.mins||s.dur||'?')+' min'+(c.nset?', '+c.nset+' séries':'')+', '+SP_INT[(s.int||2)-1][0].toLowerCase()+'</small></span><em>'+nf(c.k)+' kcal '+stars(c.lvl)+'</em></div>';}).join('');
@@ -3087,7 +3133,7 @@ function modeHTML(where){
   return h;
 }
 function renderMode(){var b=$('modeBox');if(b)b.innerHTML=modeHTML('profil');var w=$('welcomeModes');if(w)w.innerHTML=modeHTML('welcome');}
-function showWelcome(){var w=$('welcome');if(!w)return;w.hidden=!!state.profile.appMode;renderMode();}
+function showWelcome(){var w=$('welcome');if(!w)return;w.hidden=!!state.profile.appMode;renderMode();if(state.profile.appMode&&!state.ui.wizDone&&computePlan().miss&&$('wizard').hidden)openWizard(0);}
 function modeAction(t){
   var v=t.dataset.mode,p=state.profile;
   if(v==='std'){p.appMode='std';advPending=false;if(p.tone==='sec')p.tone='std';afterMode('Mode standard activé');return;}
@@ -3215,6 +3261,116 @@ setInterval(function(){
 },1000);
 
 /* =====================================================
+   ERGONOMIE : configuration guidée + cartes repliables
+   ===================================================== */
+/* ---- Cartes repliables : résumé et statut de chaque section ---- */
+function setAcc(id,txt,ok){var s=$('accs-'+id);if(!s)return;s.textContent=txt;s.className='acc-s '+(ok===true?'ok':ok===false?'todo':'');}
+function renderAcc(){
+  var p=state.profile,pl=computePlan();
+  setAcc('h-id',p.name&&p.sex&&p.age?p.name+', '+p.age+' ans':'À remplir',!!(p.name&&p.sex&&p.age));
+  setAcc('h-body',p.height&&p.weight&&p.target?fmt(p.height)+' cm, '+fmt(p.weight)+' → '+fmt(p.target)+' kg':'À remplir',!!(p.height&&p.weight&&p.target));
+  setAcc('h-sil',p.bodyNow!==null&&p.bodyGoal!==null?LEVELS[p.bodyNow].n+' → '+LEVELS[p.bodyGoal].n:'Facultatif',p.bodyNow!==null&&p.bodyGoal!==null?true:null);
+  setAcc('h-work',p.work?{sedentaire:'Sédentaire',modere:'Modérément actif',actif:'Actif'}[p.work]:'À remplir',!!p.work);
+  setAcc('h-plan',pl.miss?'Profil incomplet':nf(pl.kcal)+' kcal / jour',pl.miss?false:true);
+  setAcc('h-mode',p.appMode==='adv'?'Avancé':'Standard',null);
+  setAcc('h-tone',(TONES.filter(function(t){return t[0]===tone();})[0]||TONES[1])[1],null);
+  var R=(p.restr||[]).length+((p.restrOther||'').trim()?1:0);setAcc('h-restr',R?R+' restriction'+(R>1?'s':''):'Aucune',null);
+  var lb=state.ui&&state.ui.lastBackup;setAcc('h-save',lb?'Dernière : '+shortD(lb):'Jamais faite',lb?(dayDiff(lb,today())<8):false);
+}
+function openFirstTodo(){var ids=['h-id','h-body','h-work'];for(var i=0;i<ids.length;i++){var s=$('accs-'+ids[i]);if(s&&s.classList.contains('todo')){$('acc-'+ids[i]).open=true;return;}}}
+/* Bilan, suivi : transformer les cartes en cartes repliables, en gardant celles ouvertes par l'utilisateur */
+var accOpen={'Ton plan pour demain':true,'Ta semaine':true};
+function accify(root){
+  root.querySelectorAll('.bcard[data-acc]').forEach(function(card){
+    var h2=card.querySelector('h2.bh');if(!h2)return;var t=h2.textContent;
+    var d=document.createElement('details');d.className='acc';d.dataset.t=t;
+    d.innerHTML='<summary><span class="acc-t">'+t+'</span><span class="acc-s">'+(card.dataset.sum||'')+'</span></summary>';
+    h2.remove();var b=document.createElement('div');b.className='acc-b';while(card.firstChild)b.appendChild(card.firstChild);d.appendChild(b);
+    if(accOpen[t])d.open=true;card.replaceWith(d);
+  });
+}
+document.addEventListener('toggle',function(e){var d=e.target;if(d.classList&&d.classList.contains('acc')&&d.dataset.t)accOpen[d.dataset.t]=d.open;},true);
+
+/* ---- Configuration guidée ---- */
+var wz=0,wzMode='now';
+var WZ_SPORTS=[['muscu','Musculation'],['course','Course à pied'],['velo','Vélo'],['natation','Natation'],['gym','Gym / fitness'],['collectif','Sport collectif'],['combat','Sport de combat'],['marche','Marche'],['autre','Autre sport'],['aucun','Pas de sport']];
+var WZ=[
+ {t:'Comment tu t\u2019appelles ?',s:'Ton prénom ou un pseudo, pour que je puisse te parler.',ok:function(p){return !!p.name;},
+  f:function(p){return '<input type="text" id="wzName" class="wzin" maxlength="40" autocomplete="given-name" value="'+esc(p.name||'')+'" placeholder="Prénom">';}},
+ {t:'Tu es…',s:'Le sexe et l\u2019âge changent le calcul de ta dépense d\u2019énergie.',ok:function(p){return p.sex&&p.age>=14&&p.age<=120;},
+  f:function(p){return '<div class="wzrow">'+[['M','Un homme'],['F','Une femme']].map(function(x){return '<button class="btn wzbig" type="button" data-wz="sex" data-v="'+x[0]+'" aria-pressed="'+(p.sex===x[0])+'">'+x[1]+'</button>';}).join('')+'</div>'+
+    '<label class="wzl" for="wzAge">Ton âge</label><div class="unit"><input id="wzAge" class="wzin" inputmode="numeric" value="'+(p.age||'')+'" placeholder="ex. 30"><span>ans</span></div>';}},
+ {t:'Ta taille et ton poids',s:'Pèse-toi de préférence le matin, à jeun.',ok:function(p){return p.height>0&&p.weight>0;},
+  f:function(p){return '<label class="wzl" for="wzH">Taille</label><div class="unit"><input id="wzH" class="wzin" inputmode="decimal" value="'+(p.height?fmt(p.height):'')+'" placeholder="ex. 175"><span>cm</span></div>'+
+    '<label class="wzl" for="wzW">Poids actuel</label><div class="unit"><input id="wzW" class="wzin" inputmode="decimal" value="'+(p.weight?fmt(p.weight):'')+'" placeholder="ex. 80"><span>kg</span></div>';}},
+ {t:'Ton poids objectif',s:'Le poids que tu veux atteindre. Mets le même que ton poids actuel si tu veux le garder.',ok:function(p){return p.target>0;},
+  f:function(p){var d=p.target&&p.weight?Math.round((p.target-p.weight)*10)/10:null;
+    return '<div class="unit"><input id="wzT" class="wzin" inputmode="decimal" value="'+(p.target?fmt(p.target):'')+'" placeholder="ex. 75"><span>kg</span></div><p class="wzinfo" id="wzTi">'+(d===null?'':Math.abs(d)<1?'Objectif : garder ton poids.':(d<0?fmt(-d)+' kg à perdre.':fmt(d)+' kg à prendre.'))+'</p>';}},
+ {t:'Ta journée de travail',s:'En dehors du sport, combien tu bouges ? Ton téléphone compte sûrement tes pas.',ok:function(p){return !!p.work;},
+  f:function(p){return [['sedentaire','Sédentaire','Moins de 5 000 pas par jour'],['modere','Modérément actif','Entre 5 000 et 10 000 pas'],['actif','Actif','Plus de 10 000 pas par jour']].map(function(x){return '<button class="btn wzcard" type="button" data-wz="work" data-v="'+x[0]+'" aria-pressed="'+(p.work===x[0])+'"><b>'+x[1]+'</b><small>'+x[2]+'</small></button>';}).join('');}},
+ {t:'Ton sport',s:'Ton activité habituelle. Tu pourras noter chaque séance en détail dans l\u2019onglet Sport.',ok:function(p){return p.sport==='aucun'||(p.sport&&p.sessions!==null&&p.sessionMin);},
+  f:function(p){var h='<div class="chips wzchips">'+WZ_SPORTS.map(function(x){return '<button class="btn" type="button" data-wz="sport" data-v="'+x[0]+'" aria-pressed="'+(p.sport===x[0])+'">'+x[1]+'</button>';}).join('')+'</div>';
+    if(p.sport&&p.sport!=='aucun')h+='<label class="wzl">Séances par semaine</label><div class="stepper"><button class="btn" type="button" data-wz="sess" data-v="-1" aria-label="Une séance de moins">−</button><output>'+(p.sessions===null?'—':p.sessions)+'</output><button class="btn" type="button" data-wz="sess" data-v="1" aria-label="Une séance de plus">+</button></div>'+
+      '<label class="wzl">Durée d\u2019une séance</label><div class="chips wzchips">'+DURATIONS.map(function(m){return '<button class="btn" type="button" data-wz="dur" data-v="'+m+'" aria-pressed="'+(p.sessionMin===m)+'">'+DUR_LABEL[m]+'</button>';}).join('')+'</div>';
+    return h;}},
+ {t:'Ta silhouette',s:'Facultatif : choisis celle qui te ressemble aujourd\u2019hui, puis celle que tu vises.',opt:true,ok:function(){return true;},
+  f:function(p){return '<div class="mode wzmode"><button type="button" data-wz="smode" data-v="now" data-mode2="now" aria-pressed="'+(wzMode==='now')+'">Aujourd\u2019hui</button><button type="button" data-wz="smode" data-v="goal" data-mode2="goal" aria-pressed="'+(wzMode==='goal')+'">Mon objectif</button></div>'+
+    '<p class="wzhint">'+(wzMode==='now'?'Touche la silhouette qui te ressemble <b>aujourd\u2019hui</b>.':'Touche maintenant la silhouette que tu <b>vises</b>.')+'</p>'+
+    '<div class="wzsel"><span class="tag n">Aujourd\u2019hui</span> '+(p.bodyNow!==null?LEVELS[p.bodyNow].n:'pas encore choisie')+'<br><span class="tag g">Objectif</span> '+(p.bodyGoal!==null?LEVELS[p.bodyGoal].n:'pas encore choisie')+'</div>'+
+    '<div class="grid wzgrid">'+LEVELS.map(function(L,i){var n=p.bodyNow===i,g=p.bodyGoal===i,cls='sil'+(n?' is-now':'')+(g?' is-goal':'');return '<button type="button" class="'+cls+'" data-wz="lv" data-v="'+i+'" aria-label="'+L.n+(n?', aujourd\u2019hui':'')+(g?', objectif':'')+'"><span class="tags">'+(n?'<i class="tag n">Aujourd\u2019hui</i>':'')+(g?'<i class="tag g">Objectif</i>':'')+'</span><svg viewBox="-42 2 84 196" aria-hidden="true">'+body(i,sex())+'</svg><span class="nm">'+L.n+'</span></button>';}).join('')+'</div>';}},
+ {t:'Ton objectif calorique',s:'Je peux le calculer pour toi, ou tu choisis toi-même ta cible si tu la connais.',
+  ok:function(){var r=computePlan();if(r.miss)return false;return state.plan.kcalMode!=='custom'||(!!state.plan.kcalCustom&&!r.customBad);},
+  f:function(){var r=computePlan();if(r.miss)return '<p class="wzinfo">Il manque : '+r.miss.join(', ')+'. Reviens en arrière pour compléter.</p>';
+    var c=state.plan.kcalMode==='custom';
+    return '<div class="wzrow"><button class="btn wzbig" type="button" data-wz="kmode" data-v="auto" aria-pressed="'+!c+'">Calcule pour moi</button><button class="btn wzbig" type="button" data-wz="kmode" data-v="custom" aria-pressed="'+c+'">Je choisis mes kcal</button></div>'+
+      (c?'<label class="wzl" for="wzK">Ma cible par jour</label><div class="unit"><input id="wzK" class="wzin" inputmode="numeric" value="'+(state.plan.kcalCustom||'')+'" placeholder="ex. 2500"><span>kcal</span></div>':'')+
+      '<div id="wzPlanBox">'+wzPlanBox()+'</div><p class="wzinfo">Tu pourras changer ça à tout moment dans ton profil, carte « Ton plan ».</p>';}}
+];
+function wzPlanBox(){
+  var r=computePlan();if(r.miss)return '';var c=state.plan.kcalMode==='custom',rg=r.range;
+  var rgTxt=r.dir==='lose'?'Pour perdre du poids : '+nf(rg.max)+' kcal au maximum (sous ta dépense de '+nf(r.tdee)+' kcal).':r.dir==='gain'?'Pour prendre du poids : '+nf(rg.min)+' kcal au minimum (au-dessus de ta dépense de '+nf(r.tdee)+' kcal).':'Pour garder ton poids : entre '+nf(rg.min)+' et '+nf(rg.max)+' kcal.';
+  var h=c?'<p class="wzinfo">'+rgTxt+'</p>':'';
+  if(c&&r.customBad)return h+'<div class="warn">Avec '+nf(r.customBad)+' kcal, tu irais dans le sens inverse de ton objectif. Choisis une valeur dans la plage indiquée, ou laisse-moi calculer.</div>';
+  if(c&&!state.plan.kcalCustom)return h;
+  return h+'<div class="wzplan"><span>'+(c?'Ta cible personnelle':'Je vise pour toi')+'</span><b>'+nf(r.kcal)+' kcal</b><div class="wzm"><div><b>'+r.p+' g</b>protéines</div><div><b>'+r.g+' g</b>glucides</div><div><b>'+r.l+' g</b>lipides</div></div><p>Et '+fmt(r.water/1000)+' L d\u2019eau par jour.'+(c?'':' Mon calcul : ta dépense ('+nf(r.tdee)+' kcal) ajustée selon ton objectif.')+'</p></div>'+
+    (c&&r.kcal<r.floor?'<div class="warn">Ta cible est sous le minimum que je conseille ('+nf(r.floor)+' kcal). Un suivi par un médecin ou un diététicien est recommandé.</div>':'');
+}
+function openWizard(start){wz=start||0;$('wizard').hidden=false;document.body.style.overflow='hidden';renderWizard();}
+function closeWizard(done){$('wizard').hidden=true;document.body.style.overflow='';if(done){document.querySelectorAll('#view-profil .acc').forEach(function(d){d.open=false;});state.ui.wizDone=true;save(true);renderAll();showView('journal');}}
+function renderWizard(){
+  var p=state.profile,S=WZ[wz],last=wz===WZ.length-1;
+  $('wzBody').innerHTML='<div class="wzprog"><span>Étape '+(wz+1)+' sur '+WZ.length+'</span><div class="wzbar"><i style="width:'+((wz+1)/WZ.length*100)+'%"></i></div></div>'+
+    '<h2 class="wzt">'+S.t+'</h2><p class="wzs">'+S.s+'</p><div class="wzf">'+S.f(p)+'</div>'+
+    '<div class="wznav">'+(wz>0?'<button class="btn ghost" type="button" data-wz="prev">Retour</button>':'<button class="btn ghost" type="button" data-wz="later">Plus tard</button>')+
+    '<button class="btn primary" type="button" data-wz="next" id="wzNext"'+(S.ok(p)?'':' disabled')+'>'+(last?'C\u2019est parti !':S.opt&&(p.bodyNow===null||p.bodyGoal===null)?'Passer':'Suivant')+'</button></div>';
+  var first=$('wzBody').querySelector('.wzin');if(first&&!first.value)setTimeout(function(){first.focus();},50);
+}
+function wzCheck(){var b=$('wzNext');if(b)b.disabled=!WZ[wz].ok(state.profile);}
+function wzAction(t){
+  var a=t.dataset.wz,v=t.dataset.v,p=state.profile;
+  if(a==='next'){if(!WZ[wz].ok(p))return;save(true);if(wz===WZ.length-1){closeWizard(true);toast('Profil prêt. Bienvenue !');return;}wz++;renderWizard();$('wizard').scrollTop=0;return;}
+  if(a==='prev'){wz=Math.max(0,wz-1);renderWizard();return;}
+  if(a==='later'){closeWizard(false);showView('profil');return;}
+  if(a==='sex')p.sex=v;else if(a==='work')p.work=v;
+  else if(a==='sport'){p.sport=v;if(v!=='aucun'){if(p.sessions===null)p.sessions=3;if(!p.sessionMin)p.sessionMin=60;}}
+  else if(a==='sess')p.sessions=Math.max(0,Math.min(14,(p.sessions||0)+(+v)));
+  else if(a==='dur')p.sessionMin=+v;
+  else if(a==='smode')wzMode=v;
+  else if(a==='kmode'){state.plan.kcalMode=v;if(v==='custom'&&!state.plan.kcalCustom){var r0=computePlan();state.plan.kcalCustom=null;}}
+  else if(a==='lv'){if(wzMode==='now'){p.bodyNow=+v;wzMode='goal';}else p.bodyGoal=+v;}
+  save(true);renderWizard();
+}
+document.addEventListener('input',function(e){
+  var el=e.target,p=state.profile;if(!el.id||el.id.indexOf('wz')!==0)return;
+  var n=parseFloat(el.value.replace(',','.'));n=isNaN(n)?null:Math.round(n*10)/10;
+  if(el.id==='wzName')p.name=el.value.trim();else if(el.id==='wzAge')p.age=n;else if(el.id==='wzH')p.height=n;else if(el.id==='wzW')p.weight=n;
+  else if(el.id==='wzK'){state.plan.kcalCustom=n?Math.round(n):null;$('wzPlanBox').innerHTML=wzPlanBox();wzCheck();save(true);return;}
+  else if(el.id==='wzT'){p.target=n;var d=n&&p.weight?Math.round((n-p.weight)*10)/10:null;$('wzTi').textContent=d===null?'':Math.abs(d)<1?'Objectif : garder ton poids.':(d<0?fmt(-d)+' kg à perdre.':fmt(d)+' kg à prendre.');}
+  wzCheck();
+});
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.id&&e.target.id.indexOf('wz')===0){var b=$('wzNext');if(b&&!b.disabled)b.click();}});
+
+/* =====================================================
    VERSION INSTALLABLE (PWA)
    Scan des codes-barres + Open Food Facts, sauvegarde en fichier,
    stockage persistant, fonctionnement hors connexion.
@@ -3299,6 +3455,7 @@ function toast(msg){var el=$('toast');el.textContent=msg;el.classList.add('show'
 if(state.profile.bodyNow!==null&&state.profile.bodyGoal===null)mode='goal';
 ensureSeed();
 renderAll();
+openFirstTodo();
 if(!computePlan().miss)showView('journal');
 showWelcome();
 })();

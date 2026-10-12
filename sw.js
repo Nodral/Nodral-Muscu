@@ -1,6 +1,6 @@
 /* Nodral Muscu : fonctionnement hors connexion.
    Change le numéro de version à chaque mise à jour de l'app pour que les téléphones la récupèrent. */
-var VERSION='nodral-v1';
+var VERSION='nodral-v3';
 var APP=['./','./index.html','./manifest.webmanifest','./zxing.min.js','./icon-192.png','./icon-512.png','./maskable-512.png'];
 self.addEventListener('install',function(e){e.waitUntil(caches.open(VERSION).then(function(c){return c.addAll(APP);}).then(function(){return self.skipWaiting();}));});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(n){return n!==VERSION;}).map(function(n){return caches.delete(n);}));}).then(function(){return self.clients.claim();}));});
