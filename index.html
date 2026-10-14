@@ -865,6 +865,28 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
 .offshare{background:var(--pine-soft);border-radius:14px;padding:12px 14px;margin:10px 0}
 .offshare .btn{display:flex;justify-content:center;text-decoration:none;color:var(--ink);margin-top:8px}
 .offadd{width:100%}
+.qmark{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);color:var(--muted);font-weight:800;font-size:14px;cursor:pointer;padding:0;align-self:center;box-shadow:none}
+.qmark[aria-expanded="true"]{background:var(--muted);color:var(--surface);border-color:var(--muted)}
+.infobox{background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.5;margin:0 0 10px}
+.bcinfo table{margin-bottom:8px}
+.bcinfo td{text-align:right}
+.hrow{display:grid;grid-template-columns:1fr 48px;align-items:center}
+.hrow.sel{background:var(--pine-soft);border-radius:12px}
+.selbox{width:36px;height:36px;border-radius:9px;border:2px solid var(--pine);background:var(--surface);color:var(--pine-ink);font-weight:800;cursor:pointer;justify-self:center}
+.selbox[aria-pressed="true"]{background:var(--pine);border-color:var(--pine)}
+.cmpbar{position:sticky;bottom:calc(72px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:1fr auto 48px;gap:8px;align-items:center;background:var(--ink);color:var(--bg);border-radius:16px;padding:8px 10px 8px 16px;margin-top:10px;z-index:4;font-weight:700}
+.cmpbar .btn{min-height:44px}
+.cmpbar .ghost{color:var(--bg);border-color:var(--bg);padding:0}
+.cmpwrap{overflow-x:auto}
+.cmpt{width:100%;border-collapse:collapse;font-size:14px}
+.cmpt th,.cmpt td{padding:7px 6px;border-top:1px solid var(--line);text-align:center;vertical-align:top}
+.cmpt thead th{border-top:0;font-size:13px}
+.cmpt thead th small{display:block;font-weight:400;color:var(--muted)}
+.cmpt thead th.win{color:var(--pine)}
+.cmpt tbody th{text-align:left;font-weight:400;color:var(--muted);white-space:nowrap}
+.cmpt td.good{color:var(--pine);font-weight:800;background:var(--pine-soft)}
+.cmpwin{background:var(--pine-soft);border-radius:12px;padding:10px 12px;margin:10px 0}
+.cmpwin p{margin:4px 0 0}
 .scanbtn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:60px;font-size:18px}
 .scanbtn svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .scanov{position:fixed;inset:0;z-index:60;background:#000;display:flex;align-items:center;justify-content:center}
@@ -876,6 +898,11 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
 .scanmsg{position:absolute;top:calc(env(safe-area-inset-top,0px) + 24px);left:16px;right:16px;text-align:center;color:#fff;font-weight:700;font-size:17px}
 .scanx{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 28px);left:50%;transform:translateX(-50%);min-width:160px;background:#fff;color:#16252C}
 .scanwait{text-align:center;padding:30px 0;font-weight:700}
+.scanctl{position:absolute;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 96px);display:grid;gap:8px;justify-items:center}
+.scanb{background:rgba(255,255,255,.95);color:#16252C;min-height:48px;padding:6px 18px}
+.scanz{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;width:100%;max-width:320px}
+.scanz input{flex:1;accent-color:#55B89B}
+.scanhelp{color:#fff;font-size:13px;text-align:center;margin:0;opacity:.85}
 .ns{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:700;color:#fff;margin:4px 0}
 .ns b{font-size:16px}
 .ns-a{background:#038141}.ns-b{background:#85BB2F}.ns-c{background:#E6A800;color:#1d1600}.ns-d{background:#EE8100}.ns-e{background:#E63E11}
@@ -1070,7 +1097,7 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
   </div>
 </nav>
 <div class="toast" id="toast" role="status"></div>
-<div class="scanov" id="scanOv" hidden><video id="scanVideo" playsinline muted></video><div class="scanframe" aria-hidden="true"></div><p class="scanmsg" id="scanMsg"></p><button class="btn scanx" type="button" data-scan="close">Fermer</button></div>
+<div class="scanov" id="scanOv" hidden><video id="scanVideo" playsinline muted></video><div class="scanframe" aria-hidden="true"></div><p class="scanmsg" id="scanMsg"></p><div class="scanctl" id="scanCtl"></div><button class="btn scanx" type="button" data-scan="close">Fermer</button></div>
 <div class="sheet-bg" id="fsBg" hidden></div>
 <div class="sheet" id="fsSheet" role="dialog" aria-modal="true" aria-labelledby="fsTitle" hidden>
   <div class="sheet-head"><h3 id="fsTitle"></h3><button type="button" class="x" data-fs="close" aria-label="Fermer">×</button></div>
@@ -1362,7 +1389,7 @@ document.addEventListener('click',function(e){
   if(t.dataset.wzs){sportEdit(t.dataset.wzs,t.dataset.i,t.dataset.v);save(true);renderWizard();return;}
   if(t.dataset.wz){if(t.dataset.wz==='restart'){openWizard(0);return;}wzAction(t);return;}
   if(t.dataset.bk){downloadBackup();return;}
-  if(t.dataset.scan){closeScanner();return;}
+  if(t.dataset.scan){if(t.dataset.scan==='close')closeScanner();else scanCtlAct(t);return;}
   if(t.dataset.mode){modeAction(t);return;}
   if(t.dataset.fs){fsAction(t);return;}
   if(t.dataset.hs){sportEdit(t.dataset.hs,t.dataset.i,t.dataset.v);habOpen=true;renderSport();renderCompletion();save(true);return;}
@@ -3631,11 +3658,11 @@ function renderCourses(){
     '<div class="bcard shopscan"><button class="btn primary big scanbtn" type="button" data-shop="scan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7V4h3M21 7V4h-3M3 17v3h3M21 17v3h-3M7 8v8M10 8v8M13 8v8M16 8v8"/></svg>Scanner un produit</button>'+
     '<div class="ate" style="margin-top:10px"><input type="text" id="shopCode" maxlength="60" placeholder="ou tape un code-barres ou un nom" aria-label="Code-barres"><button class="btn" type="button" data-shop="code">Chercher</button></div></div>';
   if(shopBusy)h+='<p class="scanwait">Recherche du produit…</p>';
-  if(shopErr)h+='<div class="warn">'+shopErr+' Tu peux réessayer, ou ajouter le produit à la main dans ton journal.</div>'+(shopMissing&&/introuvable/.test(shopErr)?'<div class="bcard offshare">'+offAddLink(shopMissing)+'</div>':'');
+  if(shopErr)h+='<div class="warn">'+shopErr+' Tu peux réessayer, ou ajouter le produit à la main dans ton journal.</div>'+(shopMissing&&/introuvable/.test(shopErr)?barcodeInfo(shopMissing):'');
   if(shopList&&!shopBusy){h+='<div class="bcard"><p class="offh">'+shopList.items.length+' résultat'+(shopList.items.length>1?'s':'')+' pour « '+esc(shopList.q)+' »</p>'+(shopList.items.length?'<ul class="shoplist">'+shopList.items.map(function(x,i){var e=evalProduct(x);return '<li><button type="button" data-shop="pickl" data-v="'+i+'"><span class="shs" style="background:'+e.col+'">'+String(e.score).replace('.',',')+'</span><span><b>'+esc(x.name)+'</b><small>'+esc(x.brand||'')+(x.ns?' · Nutri-Score '+x.ns.toUpperCase():'')+'</small></span></button></li>';}).join('')+'</ul>':'<p class="small">Rien trouvé : essaie un autre mot ou scanne le code-barres.</p>')+'<p class="small">Classés par popularité. Touche un produit pour voir sa note détaillée.</p></div>';}
   if(shopRes&&!shopBusy){
     var x=shopRes,e=evalProduct(x),pl=computePlan(),obj=e.dir==='lose'?'perdre du poids':e.dir==='gain'?'prendre du poids':'garder ton poids';
-    h+='<div class="bcard shopres"><p class="spname">'+esc(x.name)+'</p><p class="small">'+esc([x.brand,x.qty].filter(Boolean).join(', '))+'</p><div class="shopchips">'+nsChip(x.ns)+(x.nova?'<span class="nova">NOVA '+x.nova+'</span>':'')+'</div>'+
+    h+='<div class="bcard shopres"><p class="spname">'+esc(x.name)+'</p><p class="small">'+esc([x.brand,x.qty].filter(Boolean).join(', '))+'</p><div class="shopchips">'+nsChip(x.ns)+qmark('ns')+(x.nova?'<span class="nova">NOVA '+x.nova+'</span>'+qmark('nova'):'')+'</div>'+(shopInfo&&INFO_TXT[shopInfo]?'<div class="infobox">'+INFO_TXT[shopInfo]+'</div>':'')+
       '<div class="shopscore"><div class="sring">'+scoreRing10(e.score,e.col)+'<div class="ctr"><b>'+String(e.score).replace('.',',')+'</b><span>sur 10</span></div></div><div><p class="slbl" style="color:'+e.col+'">'+e.verdict+'</p><p class="small">Pour ton objectif : '+obj+'.</p></div></div>';
     if(e.conf.length)h+='<div class="care bad"><b>Attention à tes restrictions</b><p>Ce produit '+listFr(e.conf)+'.</p></div>';
     if(e.doubt.length)h+='<p class="small">Je ne peux pas vérifier automatiquement s\u2019il est '+listFr(e.doubt)+' : regarde l\u2019étiquette.</p>';
@@ -3646,11 +3673,13 @@ function renderCourses(){
     if(!pl.miss)h+='<p class="small">100 g de ce produit = '+Math.round(x.k/pl.kcal*100)+' % de ton objectif calorique du jour'+(x.p?' et '+Math.round(x.p/pl.p*100)+' % de tes protéines':'')+'.</p>';
     h+='<button class="btn primary" type="button" data-shop="add" style="width:100%;margin-top:8px">Ajouter au journal</button><p class="small">Source : Open Food Facts, base collaborative. La note est un repère simple, calculé avec le Nutri-Score et ton objectif.</p></div>';
   }
+  if(shopCmp)h=h.replace('<div class="bcard shopscan">',cmpHTML()+'<div class="bcard shopscan">');
   var S=state.scans||[];
   if(S.length){
     h+='<details class="acc" open><summary><span class="acc-t">Tes derniers scans</span><span class="acc-s">'+S.length+' produit'+(S.length>1?'s':'')+'</span></summary><div class="acc-b"><ul class="shoplist">'+
-      S.map(function(x){var e=evalProduct(x);return '<li><button type="button" data-shop="hist" data-v="'+x.code+'"><span class="shs" style="background:'+e.col+'">'+String(e.score).replace('.',',')+'</span><span><b>'+esc(x.name)+'</b><small>'+esc(x.brand||'')+(x.ns?' · Nutri-Score '+x.ns.toUpperCase():'')+'</small></span></button></li>';}).join('')+
-      '</ul><button class="linkbtn" type="button" data-shop="clear">Effacer l\u2019historique</button></div></details>';
+      S.map(function(x){var e=evalProduct(x),on=shopSel.indexOf(x.code)>-1;return '<li class="hrow'+(on?' sel':'')+'"><button type="button" data-shop="hist" data-v="'+x.code+'"><span class="shs" style="background:'+e.col+'">'+String(e.score).replace('.',',')+'</span><span><b>'+esc(x.name)+'</b><small>'+esc(x.brand||'')+(x.ns?' · Nutri-Score '+x.ns.toUpperCase():'')+'</small></span></button><button class="selbox" type="button" data-shop="sel" data-v="'+x.code+'" aria-pressed="'+on+'" aria-label="Sélectionner pour comparer">'+(on?'✓':'')+'</button></li>';}).join('')+
+      '</ul><p class="small">Coche 2 ou 3 produits pour les comparer.</p><button class="linkbtn" type="button" data-shop="clear">Effacer l\u2019historique</button></div></details>'+
+      (shopSel.length&&!shopCmp?'<div class="cmpbar"><span>'+shopSel.length+' produit'+(shopSel.length>1?'s':'')+' sélectionné'+(shopSel.length>1?'s':'')+'</span><button class="btn primary" type="button" data-shop="cmp"'+(shopSel.length<2?' disabled':'')+'>Comparer</button><button class="btn ghost" type="button" data-shop="selclear" aria-label="Annuler la sélection">×</button></div>':'');
   }
   box.innerHTML=h;
 }
@@ -3659,8 +3688,13 @@ function shopAction(t){
   if(a==='scan'){shopScan();return;}
   if(a==='code'){shopMissing=null;shopLookup($('shopCode').value);return;}
   if(a==='pickl'&&shopList){var x=shopList.items[+t.dataset.v];shopRes=x;shopList=null;state.scans=(state.scans||[]).filter(function(s){return s.code!==x.code;});state.scans.unshift(x);state.scans=state.scans.slice(0,30);save(true);renderCourses();window.scrollTo(0,0);return;}
+  if(a==='info'){shopInfo=shopInfo===t.dataset.v?null:t.dataset.v;renderCourses();return;}
+  if(a==='sel'){var c=t.dataset.v,k=shopSel.indexOf(c);if(k>-1)shopSel.splice(k,1);else{if(shopSel.length>=3){toast('3 produits au maximum pour une comparaison lisible.');return;}shopSel.push(c);}renderCourses();return;}
+  if(a==='selclear'){shopSel=[];shopCmp=false;renderCourses();return;}
+  if(a==='cmp'){if(shopSel.length<2)return;shopCmp=true;shopRes=null;shopList=null;renderCourses();window.scrollTo(0,0);return;}
+  if(a==='cmpclose'){shopCmp=false;shopSel=[];renderCourses();return;}
   if(a==='hist'){shopRes=(state.scans||[]).filter(function(s){return s.code===t.dataset.v;})[0]||null;shopErr='';renderCourses();window.scrollTo(0,0);return;}
-  if(a==='clear'){state.scans=[];shopRes=null;save(true);renderCourses();return;}
+  if(a==='clear'){state.scans=[];shopSel=[];shopCmp=false;shopRes=null;save(true);renderCourses();return;}
   if(a==='add'&&shopRes){
     var x=shopRes,f=state.foods.filter(function(z){return z.ean===x.code;})[0];
     if(!f){f={id:uid(),name:x.name+(x.brand&&x.name.toLowerCase().indexOf(x.brand.toLowerCase())<0?' ('+x.brand+')':''),k:x.k,p:x.p,g:x.g,l:x.l,fi:x.fi,ags:x.ags,suc:x.suc,sel:x.sel,ean:x.code,ns:x.ns,serving:x.serving,src:'off',u:offUnits(x.serving,x.qty),uses:0,last:Date.now()};state.foods.push(f);save(true);}
@@ -3768,42 +3802,130 @@ function shopSearch(q){
 }
 
 /* =====================================================
+   COURSES : explications (Nutri-Score, NOVA), lecture du code-barres, comparaison
+   ===================================================== */
+var shopInfo=null,shopSel=[],shopCmp=false;
+var INFO_TXT={
+ ns:'<b>Le Nutri-Score</b> note la qualité nutritionnelle d\u2019un produit, de <b>A</b> (vert, le meilleur) à <b>E</b> (rouge). Il compare, pour 100 g, ce qui est bon (fibres, protéines, fruits et légumes) à ce qui est à limiter (calories, sucres, graisses saturées, sel). Il sert surtout à comparer des produits <b>du même rayon</b> : par exemple deux céréales entre elles.',
+ nova:'<b>NOVA</b> classe les aliments selon leur <b>niveau de transformation</b>, de 1 à 4 :<br>1 = brut ou peu transformé (fruits, légumes, viande, œufs, lait nature) ;<br>2 = ingrédient de cuisine (huile, beurre, sucre, sel) ;<br>3 = transformé (conserves, fromages, pain de boulangerie) ;<br>4 = ultra-transformé (recettes industrielles avec additifs : sodas, biscuits, plats préparés…).<br>Ce n\u2019est pas une note de calories : un produit léger peut être ultra-transformé. Le conseil courant : privilégier les groupes 1 à 3.'
+};
+function qmark(k){return '<button class="qmark" type="button" data-shop="info" data-v="'+k+'" aria-label="Qu\u2019est-ce que c\u2019est ?" aria-expanded="'+(shopInfo===k)+'">?</button>';}
+/* ---- Ce que dit un code-barres ---- */
+var GS1=[[0,19,'États-Unis ou Canada'],[20,29,'code interne au magasin'],[30,39,'États-Unis (médicaments)'],[40,49,'code interne au magasin'],[50,59,'bon de réduction'],[60,139,'États-Unis ou Canada'],[200,299,'code interne au magasin'],[300,379,'France ou Monaco'],[380,380,'Bulgarie'],[383,383,'Slovénie'],[385,385,'Croatie'],[400,440,'Allemagne'],[450,459,'Japon'],[460,469,'Russie'],[471,471,'Taïwan'],[480,480,'Philippines'],[482,482,'Ukraine'],[489,489,'Hong Kong'],[490,499,'Japon'],[500,509,'Royaume-Uni'],[520,521,'Grèce'],[528,528,'Liban'],[529,529,'Chypre'],[535,535,'Malte'],[539,539,'Irlande'],[540,549,'Belgique ou Luxembourg'],[560,560,'Portugal'],[569,569,'Islande'],[570,579,'Danemark'],[590,590,'Pologne'],[594,594,'Roumanie'],[599,599,'Hongrie'],[600,601,'Afrique du Sud'],[611,611,'Maroc'],[613,613,'Algérie'],[619,619,'Tunisie'],[622,622,'Égypte'],[628,628,'Arabie saoudite'],[629,629,'Émirats arabes unis'],[640,649,'Finlande'],[690,699,'Chine'],[700,709,'Norvège'],[729,729,'Israël'],[730,739,'Suède'],[750,750,'Mexique'],[760,769,'Suisse'],[770,771,'Colombie'],[778,779,'Argentine'],[780,780,'Chili'],[789,790,'Brésil'],[800,839,'Italie'],[840,849,'Espagne'],[858,858,'Slovaquie'],[859,859,'République tchèque'],[860,860,'Serbie'],[869,869,'Turquie'],[870,879,'Pays-Bas'],[880,880,'Corée du Sud'],[885,885,'Thaïlande'],[888,888,'Singapour'],[890,890,'Inde'],[893,893,'Vietnam'],[899,899,'Indonésie'],[900,919,'Autriche'],[930,939,'Australie'],[940,949,'Nouvelle-Zélande'],[955,955,'Malaisie'],[977,977,'presse (ISSN)'],[978,979,'livre (ISBN)']];
+function eanOk(c){var d=c.split('').map(Number),chk=d.pop(),s=0;d.reverse().forEach(function(x,i){s+=x*(i%2===0?3:1);});return (10-s%10)%10===chk;}
+function barcodeInfo(code){
+  var L=code.length,fmtN=L===13?'EAN-13 (le code standard en Europe)':L===8?'EAN-8 (code court, petits emballages)':L===12?'UPC-A (code américain)':L===14?'GTIN-14 (code de carton ou de lot)':'format inhabituel ('+L+' chiffres)';
+  var ok=(L===8||L===12||L===13||L===14)?eanOk(code):null,c13=L===12?'0'+code:code,pre=L>=12?+c13.slice(0,3):null,org=null;
+  if(pre!=null)GS1.forEach(function(g){if(pre>=g[0]&&pre<=g[1])org=g[2];});
+  var inStore=org==='code interne au magasin';
+  var rows=[['Code',code.replace(/(\d)(?=(\d{4})+$)/g,'$1 ')],['Format',fmtN]];
+  if(org)rows.push(['Préfixe '+String(pre).padStart(3,'0'),inStore?'code créé par le magasin lui-même':'entreprise enregistrée en '+org]);
+  if(ok!==null)rows.push(['Clé de contrôle',ok?'valide : le code a bien été lu':'invalide : le code a sans doute été mal lu']);
+  var h='<div class="bcard bcinfo"><p class="offh">Ce que dit ce code-barres</p><table class="htable">'+rows.map(function(r){return '<tr><th scope="row">'+r[0]+'</th><td>'+r[1]+'</td></tr>';}).join('')+'</table>';
+  if(ok===false)h+='<div class="warn">Le code semble mal lu : rescanne-le en tenant le téléphone bien droit, ou tape les chiffres écrits sous les barres.</div>';
+  else if(inStore)h+='<p>C\u2019est un <b>code interne au magasin</b> : en général un produit vendu au poids ou à la coupe (fruits, fromage, boucherie, boulangerie). Ces codes ne sont dans aucune base publique, et peuvent même contenir le prix ou le poids.</p><p class="small">Ajoute ce produit à la main dans ton journal : cherche l\u2019aliment par son nom (ex. « emmental », « pomme »).</p>';
+  else h+='<p>Un code-barres ne contient <b>que l\u2019identifiant</b> du produit (le pays d\u2019enregistrement de la marque et un numéro), jamais ses valeurs nutritionnelles. Ce produit n\u2019a simplement pas encore été ajouté à Open Food Facts.</p>'+(org&&!inStore?'<p class="small">Attention : le préfixe indique où la marque est enregistrée, pas forcément où le produit a été fabriqué.</p>':'')+offAddLink(code);
+  return h+'</div>';
+}
+/* ---- Comparaison de produits ---- */
+function cmpHTML(){
+  var P=shopSel.map(function(c){return (state.scans||[]).filter(function(s){return s.code===c;})[0];}).filter(Boolean);if(P.length<2)return '';
+  var E=P.map(evalProduct),dir=E[0].dir,best=0;
+  E.forEach(function(e,i){var b=E[best];if(e.score>b.score||(e.score===b.score&&(dir==='gain'?P[i].p>P[best].p:P[i].k<P[best].k)))best=i;});
+  // règles : quelle valeur est la meilleure pour chaque ligne
+  var R=[['Note pour toi',function(x,i){return E[i].score;},'max',function(v){return String(v).replace('.',',')+' / 10';}],
+    ['Nutri-Score',function(x){return x.ns&&'abcde'.indexOf(x.ns)>-1?'abcde'.indexOf(x.ns):null;},'min',function(v,x){return x.ns?x.ns.toUpperCase():'—';}],
+    ['NOVA',function(x){return x.nova||null;},'min',function(v){return v||'—';}],
+    ['Énergie',function(x){return x.k;},dir==='lose'?'min':dir==='gain'?'max':null,function(v){return nf(v)+' kcal';}],
+    ['Protéines',function(x){return x.p;},'max',function(v){return gq(v)+' g';}],
+    ['Sucres',function(x){return x.suc;},'min',function(v){return v==null?'—':gq(v)+' g';}],
+    ['Lipides',function(x){return x.l;},dir==='lose'?'min':null,function(v){return gq(v)+' g';}],
+    ['Saturés',function(x){return x.ags;},'min',function(v){return v==null?'—':gq(v)+' g';}],
+    ['Fibres',function(x){return x.fi;},'max',function(v){return gq(v)+' g';}],
+    ['Sel',function(x){return x.sel;},'min',function(v){return v==null?'—':gq(v)+' g';}]];
+  var why=[],W=P[best];
+  var h='<div class="bcard cmp"><p class="offh">Comparaison pour 100 g</p><div class="cmpwrap"><table class="cmpt"><thead><tr><th scope="col"></th>'+P.map(function(x,i){return '<th scope="col"'+(i===best?' class="win"':'')+'>'+esc(x.name)+(x.brand?'<small>'+esc(x.brand)+'</small>':'')+'</th>';}).join('')+'</tr></thead><tbody>'+
+    R.map(function(r){var vals=P.map(function(x,i){return r[1](x,i);}),ok=vals.filter(function(v){return v!=null;}),tgt=r[2]&&ok.length>1?(r[2]==='max'?Math.max.apply(0,ok):Math.min.apply(0,ok)):null,all=ok.length>1&&ok.every(function(v){return v===ok[0];});
+      if(tgt!=null&&!all&&vals[best]===tgt&&r[0]!=='Note pour toi'){var other=vals.filter(function(v,i){return i!==best&&v!=null;});if(other.length){var o=r[2]==='max'?Math.max.apply(0,other):Math.min.apply(0,other);
+        var lbl={'Nutri-Score':'meilleur Nutri-Score','NOVA':'moins transformé','Énergie':dir==='lose'?'moins calorique':'plus énergétique','Protéines':'plus de protéines','Sucres':'moins de sucres','Lipides':'moins de lipides','Saturés':'moins de graisses saturées','Fibres':'plus de fibres','Sel':'moins salé'}[r[0]];
+        if(lbl&&o!==tgt)why.push(lbl+(r[0]==='Nutri-Score'||r[0]==='NOVA'?'':' ('+r[3](tgt,W).replace(' / 10','')+' contre '+r[3](o,W).replace(' / 10','')+')'));}}
+      return '<tr><th scope="row">'+r[0]+'</th>'+P.map(function(x,i){var v=vals[i],good=tgt!=null&&!all&&v===tgt;return '<td'+(good?' class="good"':'')+'>'+(v==null?'—':r[3](v,x))+'</td>';}).join('')+'</tr>';}).join('')+'</tbody></table></div>';
+  var tie=E.filter(function(e){return e.score===E[best].score;}).length>1;
+  h+='<div class="cmpwin"><b>'+(tie?'Ex æquo sur la note, avantage à : ':'Le meilleur choix pour ton objectif : ')+esc(W.name)+'</b>'+(why.length?'<p>Ses atouts : '+listFr(why)+'.</p>':'')+(E[best].conf.length?'<p class="small">Attention : il ne respecte pas tes restrictions ('+listFr(E[best].conf)+').</p>':'')+'</div>'+
+    '<p class="small">En vert : la meilleure valeur de chaque ligne pour ton objectif.</p><button class="btn ghost" type="button" data-shop="cmpclose" style="width:100%">Fermer la comparaison</button></div>';
+  return h;
+}
+
+/* =====================================================
    VERSION INSTALLABLE (PWA)
    Scan des codes-barres + Open Food Facts, sauvegarde en fichier,
    stockage persistant, fonctionnement hors connexion.
    ===================================================== */
-var scanStream=null,scanLoop=null,zxReader=null,scanTarget='journal';
+var scanStream=null,scanLoop=null,zxReader=null,scanTarget='journal',scanCams=[],scanCamIdx=-1,scanNative=null;
 function loadZX(){return new Promise(function(ok,ko){if(window.ZXing)return ok();var s=document.createElement('script');s.src='zxing.min.js';s.onload=ok;s.onerror=ko;document.head.appendChild(s);});}
-function openScanner(target){
-  scanTarget=target||'journal';
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast('Ton navigateur ne donne pas accès à la caméra. Tape le code-barres dans la recherche.');return;}
-  var ov=$('scanOv'),v=$('scanVideo');ov.hidden=false;$('scanMsg').textContent='Place le code-barres dans le cadre';
-  var cons={video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false};
-  var useNative='BarcodeDetector' in window;
-  var start=useNative?BarcodeDetector.getSupportedFormats().then(function(f){return f.indexOf('ean_13')>-1;}).catch(function(){return false;}):Promise.resolve(false);
-  start.then(function(native){
-    if(native){
-      var det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e']});
-      return navigator.mediaDevices.getUserMedia(cons).then(function(st){scanStream=st;fixZoom(st);v.srcObject=st;return v.play();}).then(function(){
-        var busy=false;scanLoop=setInterval(function(){if(busy||v.readyState<2)return;busy=true;det.detect(v).then(function(r){busy=false;if(r&&r.length)gotCode(r[0].rawValue);}).catch(function(){busy=false;});},250);
-      });
-    }
-    return loadZX().then(function(){
-      var hints=new Map();hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS,[ZXing.BarcodeFormat.EAN_13,ZXing.BarcodeFormat.EAN_8,ZXing.BarcodeFormat.UPC_A,ZXing.BarcodeFormat.UPC_E]);
-      zxReader=new ZXing.BrowserMultiFormatReader(hints);
-      return zxReader.decodeFromConstraints(cons,v,function(res){if(res)gotCode(res.getText());}).then(function(){fixZoom(v.srcObject);});
-    });
-  }).catch(function(e){closeScanner();toast(e&&e.name==='NotAllowedError'?'Accès à la caméra refusé. Autorise-le dans les réglages du navigateur.':'Impossible d\u2019ouvrir la caméra. Tape le code-barres dans la recherche.');});
-}
-/* Certains téléphones ouvrent la caméra avec un zoom fort : on le remet au minimum et on active la mise au point continue */
+/* Certains téléphones ouvrent par défaut l'objectif zoom (téléobjectif), qui ne fait pas la mise au point de près.
+   On choisit l'objectif principal arrière, on remet le zoom au minimum, et on permet de changer d'objectif. */
 function fixZoom(st){try{var tr=st&&st.getVideoTracks?st.getVideoTracks()[0]:null;if(!tr||!tr.getCapabilities)return;var c=tr.getCapabilities(),adv=[];
   if(c.zoom&&c.zoom.min!=null)adv.push({zoom:c.zoom.min});if(c.focusMode&&c.focusMode.indexOf('continuous')>-1)adv.push({focusMode:'continuous'});
   if(adv.length)tr.applyConstraints({advanced:adv}).catch(function(){});}catch(e){}}
-function closeScanner(){
+function camNum(c){var l=c.label||'',m=/(\d+)\s*,/.exec(l)||/(\d+)(?!.*\d)/.exec(l);return m?+m[1]:99;}
+function camPen(c){return /t[ée]l[ée]|tele|zoom|ultra|wide|grand.angle|macro|depth|profondeur/i.test(c.label||'')?1:0;}
+function pickMainBack(cams){var back=cams.filter(function(c){return /back|rear|arri[eè]re|environment/i.test(c.label);});if(!back.length)back=cams.filter(function(c){return !/front|avant|user|facetime/i.test(c.label);});if(!back.length)back=cams;
+  return back.slice().sort(function(a,b){return camPen(a)-camPen(b)||camNum(a)-camNum(b);})[0];}
+function stopStreams(){
   clearInterval(scanLoop);scanLoop=null;
   if(zxReader){try{zxReader.reset();}catch(e){}zxReader=null;}
   if(scanStream){scanStream.getTracks().forEach(function(t){t.stop();});scanStream=null;}
-  var v=$('scanVideo');if(v)v.srcObject=null;$('scanOv').hidden=true;
+  var v=$('scanVideo');if(v&&v.srcObject){v.srcObject.getTracks&&v.srcObject.getTracks().forEach(function(t){t.stop();});v.srcObject=null;}
+}
+function closeScanner(){stopStreams();$('scanOv').hidden=true;}
+function openScanner(target){
+  scanTarget=target||'journal';
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast('Ton navigateur ne donne pas accès à la caméra. Tape le code-barres dans la recherche.');return;}
+  $('scanOv').hidden=false;$('scanMsg').textContent='Place le code-barres dans le cadre';$('scanCtl').innerHTML='';
+  var nat=scanNative!==null?Promise.resolve(scanNative):('BarcodeDetector' in window?BarcodeDetector.getSupportedFormats().then(function(f){return f.indexOf('ean_13')>-1;}).catch(function(){return false;}):Promise.resolve(false));
+  nat.then(function(n){scanNative=n;
+    if(scanCams.length)return;
+    return navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false}).then(function(tmp){
+      return navigator.mediaDevices.enumerateDevices().then(function(all){tmp.getTracks().forEach(function(t){t.stop();});
+        all=all.filter(function(d){return d.kind==='videoinput';});
+        scanCams=all.filter(function(c){return !/front|avant|user|facetime/i.test(c.label);});if(!scanCams.length)scanCams=all;});
+    });
+  }).then(function(){
+    var saved=state.ui.camId,idx=-1;scanCams.forEach(function(c,i){if(c.deviceId===saved)idx=i;});
+    if(idx<0&&scanCams.length)idx=scanCams.indexOf(pickMainBack(scanCams));
+    scanCamIdx=idx;return startCam();
+  }).catch(function(e){closeScanner();toast(e&&e.name==='NotAllowedError'?'Accès à la caméra refusé. Autorise-le dans les réglages du navigateur.':'Impossible d\u2019ouvrir la caméra. Tape le code-barres dans la recherche.');});
+}
+function startCam(){
+  stopStreams();
+  var v=$('scanVideo'),cam=scanCams[scanCamIdx];
+  var cons={video:cam&&cam.deviceId?{deviceId:{exact:cam.deviceId}}:{facingMode:{ideal:'environment'}},audio:false};
+  if(scanNative){
+    var det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e']});
+    return navigator.mediaDevices.getUserMedia(cons).then(function(st){scanStream=st;fixZoom(st);v.srcObject=st;return v.play();}).then(function(){
+      renderScanCtl();var busy=false;
+      scanLoop=setInterval(function(){if(busy||v.readyState<2)return;busy=true;det.detect(v).then(function(r){busy=false;if(r&&r.length)gotCode(r[0].rawValue);}).catch(function(){busy=false;});},200);
+    });
+  }
+  return loadZX().then(function(){
+    var hints=new Map();hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS,[ZXing.BarcodeFormat.EAN_13,ZXing.BarcodeFormat.EAN_8,ZXing.BarcodeFormat.UPC_A,ZXing.BarcodeFormat.UPC_E]);
+    zxReader=new ZXing.BrowserMultiFormatReader(hints);
+    return zxReader.decodeFromConstraints(cons,v,function(res){if(res)gotCode(res.getText());}).then(function(){scanStream=v.srcObject;fixZoom(scanStream);renderScanCtl();});
+  });
+}
+function renderScanCtl(){
+  var box=$('scanCtl');if(!box)return;var h='';
+  if(scanCams.length>1)h+='<button class="btn scanb" type="button" data-scan="cam">Changer d\u2019objectif ('+(scanCamIdx+1)+'/'+scanCams.length+')</button>';
+  try{var tr=scanStream&&scanStream.getVideoTracks()[0],c=tr&&tr.getCapabilities?tr.getCapabilities():{},st=tr&&tr.getSettings?tr.getSettings():{};
+    if(c.zoom&&c.zoom.max>c.zoom.min)h+='<label class="scanz">Zoom<input type="range" id="scanZoom" min="'+c.zoom.min+'" max="'+c.zoom.max+'" step="'+(c.zoom.step||0.1)+'" value="'+(st.zoom||c.zoom.min)+'"></label>';}catch(e){}
+  h+='<p class="scanhelp">Trop zoomé ou flou de près ? Touche « Changer d\u2019objectif » : je retiens ton choix.</p>';
+  box.innerHTML=scanCams.length>1||h.indexOf('scanZoom')>-1?h:'';
+  var z=$('scanZoom');if(z)z.oninput=function(){var tr=scanStream&&scanStream.getVideoTracks()[0];if(tr)tr.applyConstraints({advanced:[{zoom:+z.value}]}).catch(function(){});};
+}
+function scanCtlAct(t){
+  if(t.dataset.scan==='cam'&&scanCams.length>1){scanCamIdx=(scanCamIdx+1)%scanCams.length;state.ui.camId=scanCams[scanCamIdx].deviceId;save(true);
+    $('scanMsg').textContent='Objectif '+(scanCamIdx+1)+' sur '+scanCams.length;startCam().catch(function(){toast('Cet objectif ne s\u2019ouvre pas, essaie le suivant.');});}
 }
 function gotCode(code){
   code=String(code).replace(/\D/g,'');if(code.length<8)return;
