@@ -859,6 +859,12 @@ nav.tabs button{font-size:11.5px;padding:0 1px}nav.tabs button svg{width:22px;he
 .ff2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .ff2 .field{margin:0}
 .fport{margin:10px 0}
+.offbtn{width:100%;margin-top:10px}
+.offh{font-weight:700;margin:12px 0 6px}
+.ns.mini{padding:0 7px;font-size:12px;margin:0 0 0 6px;vertical-align:middle}
+.offshare{background:var(--pine-soft);border-radius:14px;padding:12px 14px;margin:10px 0}
+.offshare .btn{display:flex;justify-content:center;text-decoration:none;color:var(--ink);margin-top:8px}
+.offadd{width:100%}
 .scanbtn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:60px;font-size:18px}
 .scanbtn svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .scanov{position:fixed;inset:0;z-index:60;background:#000;display:flex;align-items:center;justify-content:center}
@@ -1931,9 +1937,9 @@ function renderSheet(){
     h=(sh.pick?'<div class="chips smeals" role="group" aria-label="Repas">'+MEALS.filter(function(m){return state.mealsOn[m[0]]||m[0]===sh.meal;}).map(function(m){return '<button class="btn" type="button" data-act="smeal" data-meal="'+m[0]+'" aria-pressed="'+(m[0]===sh.meal)+'">'+m[1]+'</button>';}).join('')+'</div>':'')+'<input type="search" id="fSearch" placeholder="Nom de l\u2019aliment ou code-barres" aria-label="Chercher un aliment" value="'+esc(sh.qtext||'')+'">'+
       '<button class="btn primary" type="button" data-act="newfood">Créer un aliment avec son étiquette</button>'+
       '<button class="btn primary scanbtn" type="button" data-act="scan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7V4h3M21 7V4h-3M3 17v3h3M21 17v3h-3M7 8v8M10 8v8M13 8v8M16 8v8"/></svg>Scanner un code-barres</button>'+
-      '<ul class="flist" id="fList"></ul>';
-    b.innerHTML=h;renderFoodList();
-    $('fSearch').oninput=function(){sh.qtext=this.value;renderFoodList();};
+      '<ul class="flist" id="fList"></ul><div id="offBox"></div>';
+    b.innerHTML=h;renderFoodList();renderOffBox();
+    $('fSearch').oninput=function(){sh.qtext=this.value;sh.off=null;sh.offErr='';renderFoodList();renderOffBox();};
   }else if(sh.mode==='qty'){
     var e=curEntry(),f=foodById(sh.foodId),nm=e?e.name:(f?f.name:'');
     $('sheetTitle').textContent=mealName(sh.meal);
@@ -1963,6 +1969,7 @@ function renderSheet(){
       '<div class="field"><label for="f_cs">1 cuillère à soupe</label><div class="unit"><input id="f_cs" inputmode="decimal" placeholder="≈ 15" value="'+(fe&&fe.u&&fe.u.cs?fmt(fe.u.cs):'')+'"><span>g</span></div></div></div>'+
       '<label class="autochk"><input type="checkbox" id="f_liq"'+(fe&&fe.u&&fe.u.ml?' checked':'')+'> C\u2019est un liquide : je le mesure en ml (valeurs pour 100 ml)</label></details>'+
       '<div class="field"><label for="fEan">Code-barres (facultatif)</label><input type="text" id="fEan" inputmode="numeric" maxlength="14" value="'+esc(fe&&fe.ean?fe.ean:(/^\d{6,}$/.test(sh.qtext||'')?sh.qtext:''))+'"></div>'+
+      ((fe&&fe.ean&&fe.src!=='off')||/^\d{8,14}$/.test(sh.qtext||'')?'<div class="offshare"><b>Partage ce produit avec tout le monde</b>'+offAddLink((fe&&fe.ean)||sh.qtext)+'</div>':'')+
       '<p class="small">Seuls le nom et les calories (ou les macros) sont obligatoires. Pas de calories sur l\u2019étiquette ? Laisse vide : je les calcule. Le code-barres te permettra de retrouver l\u2019aliment en le tapant, puis en le scannant plus tard.</p>'+
       '<button class="btn primary" type="button" data-act="saveFood">Enregistrer l\u2019aliment</button>'+
       (fe?'<button class="btn danger" type="button" data-act="delFood">Supprimer de ma base</button>':'')+
@@ -2033,6 +2040,8 @@ function journalAction(t){
   }
   if(a==='add'){openSheet({meal:t.dataset.meal,mode:'search',qtext:''});return;}
   if(a==='skip'||a==='unskip'){d=dayData(curDate);d.skip=d.skip||{};if(a==='skip')d.skip[t.dataset.meal]=true;else delete d.skip[t.dataset.meal];renderJournal();save(true);toast(a==='skip'?mealName(t.dataset.meal)+' sauté aujourd\u2019hui seulement : ses calories vont sur tes autres repas':mealName(t.dataset.meal)+' remis');return;}
+  if(a==='offsearch'){offSearchAct();return;}
+  if(a==='offpick'&&sh&&sh.off){var x=sh.off[+t.dataset.v],fo=foodFromProd(x);sh.mode='qty';sh.foodId=fo.id;sh.u=null;sh.uq=null;sh.q=fo.serving||100;renderSheet();toast(fo.name+' ajouté à ta base');return;}
   if(a==='scan'){openScanner();return;}
   if(a==='offcode'){findProduct(t.dataset.v);return;}
   if(a==='quickadd'){openSheet({meal:autoMeal(),mode:'search',qtext:'',pick:true});return;}
@@ -3531,20 +3540,21 @@ document.addEventListener('input',function(e){if(e.target.classList&&e.target.cl
 /* =====================================================
    ONGLET COURSES : en magasin, je scanne un produit et je sais s'il colle à mon objectif
    ===================================================== */
-var shopRes=null,shopErr='',shopBusy=false;
+var shopRes=null,shopErr='',shopBusy=false,shopMissing=null;
 var ALLERG={gluten:[['en:gluten'],'du gluten'],lactose:[['en:milk'],'du lait'],arachide:[['en:peanuts'],'de l\u2019arachide'],noix:[['en:nuts'],'des fruits à coque'],oeuf:[['en:eggs'],'des œufs'],poisson:[['en:fish','en:crustaceans','en:molluscs'],'du poisson ou des fruits de mer'],soja:[['en:soybeans'],'du soja'],sesame:[['en:sesame-seeds'],'du sésame']};
 function offUnits(serv,qty){var u={};if(serv)u.pc=[serv,'portion'];if(/\d\s*(ml|cl|l)\b/i.test(qty||''))u.ml=1;return u;}
 function n2(x){var n=parseFloat(x);return isNaN(n)?null:Math.round(n*100)/100;}
 function nsChip(g){if(!g||'abcde'.indexOf(g)<0||g.length!==1)return '<span class="ns ns-x">Nutri-Score inconnu</span>';return '<span class="ns ns-'+g+'">Nutri-Score <b>'+g.toUpperCase()+'</b></span>';}
 function shopScan(){if(typeof openScanner!=='function'){toast('Le scan fonctionne dans l\u2019app installée sur ton téléphone.');return;}openScanner('courses');}
 function shopLookup(code){
-  code=String(code||'').replace(/\D/g,'');if(code.length<8){toast('Code-barres incomplet : il fait 8 ou 13 chiffres.');return;}
+  var raw=String(code||'').trim();if(raw&&!/^[\d\s]+$/.test(raw)){if(raw.length<3){toast('Tape au moins 3 lettres.');return;}shopSearch(raw);return;}
+  code=raw.replace(/\D/g,'');if(code.length<8){toast('Code-barres incomplet : il fait 8 ou 13 chiffres.');return;}shopList=null;
   shopBusy=true;shopErr='';renderCourses();
   fetch('https://world.openfoodfacts.org/api/v2/product/'+code+'.json?fields=code,product_name,product_name_fr,brands,quantity,nutriments,nutriscore_grade,nova_group,serving_quantity,allergens_tags,ingredients_analysis_tags',{headers:{'Accept':'application/json'}})
     .then(function(r){return r.json();})
     .then(function(d){
       shopBusy=false;var p=d&&d.status===1?d.product:null;
-      if(!p){shopRes=null;shopErr='Produit introuvable sur Open Food Facts (code '+code+').';renderCourses();return;}
+      if(!p){shopRes=null;shopErr='Produit introuvable sur Open Food Facts (code '+code+').';shopMissing=code;renderCourses();return;}
       var n=p.nutriments||{},k=n2(n['energy-kcal_100g']);if(k===null&&n['energy_100g']!=null)k=Math.round(n2(n['energy_100g'])/4.184);
       if(k===null){shopRes=null;shopErr='Ce produit n\u2019a pas encore de valeurs nutritionnelles sur Open Food Facts.';renderCourses();return;}
       var prod={code:code,name:(p.product_name_fr||p.product_name||('Produit '+code)).trim(),brand:(p.brands||'').split(',')[0].trim(),qty:p.quantity||'',k:k,p:n2(n.proteins_100g)||0,g:n2(n.carbohydrates_100g)||0,l:n2(n.fat_100g)||0,fi:n2(n.fiber_100g)||0,
@@ -3619,9 +3629,10 @@ function renderCourses(){
   var box=$('view-courses');if(!box)return;
   var h='<h1 class="vtitle">Tes courses</h1><p class="hint">En magasin, scanne un produit avant de l\u2019acheter : je te dis s\u2019il colle à ton objectif.</p>'+
     '<div class="bcard shopscan"><button class="btn primary big scanbtn" type="button" data-shop="scan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7V4h3M21 7V4h-3M3 17v3h3M21 17v3h-3M7 8v8M10 8v8M13 8v8M16 8v8"/></svg>Scanner un produit</button>'+
-    '<div class="ate" style="margin-top:10px"><input type="text" id="shopCode" inputmode="numeric" maxlength="14" placeholder="ou tape le code-barres" aria-label="Code-barres"><button class="btn" type="button" data-shop="code">Chercher</button></div></div>';
+    '<div class="ate" style="margin-top:10px"><input type="text" id="shopCode" maxlength="60" placeholder="ou tape un code-barres ou un nom" aria-label="Code-barres"><button class="btn" type="button" data-shop="code">Chercher</button></div></div>';
   if(shopBusy)h+='<p class="scanwait">Recherche du produit…</p>';
-  if(shopErr)h+='<div class="warn">'+shopErr+' Tu peux réessayer, ou ajouter le produit à la main dans ton journal.</div>';
+  if(shopErr)h+='<div class="warn">'+shopErr+' Tu peux réessayer, ou ajouter le produit à la main dans ton journal.</div>'+(shopMissing&&/introuvable/.test(shopErr)?'<div class="bcard offshare">'+offAddLink(shopMissing)+'</div>':'');
+  if(shopList&&!shopBusy){h+='<div class="bcard"><p class="offh">'+shopList.items.length+' résultat'+(shopList.items.length>1?'s':'')+' pour « '+esc(shopList.q)+' »</p>'+(shopList.items.length?'<ul class="shoplist">'+shopList.items.map(function(x,i){var e=evalProduct(x);return '<li><button type="button" data-shop="pickl" data-v="'+i+'"><span class="shs" style="background:'+e.col+'">'+String(e.score).replace('.',',')+'</span><span><b>'+esc(x.name)+'</b><small>'+esc(x.brand||'')+(x.ns?' · Nutri-Score '+x.ns.toUpperCase():'')+'</small></span></button></li>';}).join('')+'</ul>':'<p class="small">Rien trouvé : essaie un autre mot ou scanne le code-barres.</p>')+'<p class="small">Classés par popularité. Touche un produit pour voir sa note détaillée.</p></div>';}
   if(shopRes&&!shopBusy){
     var x=shopRes,e=evalProduct(x),pl=computePlan(),obj=e.dir==='lose'?'perdre du poids':e.dir==='gain'?'prendre du poids':'garder ton poids';
     h+='<div class="bcard shopres"><p class="spname">'+esc(x.name)+'</p><p class="small">'+esc([x.brand,x.qty].filter(Boolean).join(', '))+'</p><div class="shopchips">'+nsChip(x.ns)+(x.nova?'<span class="nova">NOVA '+x.nova+'</span>':'')+'</div>'+
@@ -3646,7 +3657,8 @@ function renderCourses(){
 function shopAction(t){
   var a=t.dataset.shop;
   if(a==='scan'){shopScan();return;}
-  if(a==='code'){shopLookup($('shopCode').value);return;}
+  if(a==='code'){shopMissing=null;shopLookup($('shopCode').value);return;}
+  if(a==='pickl'&&shopList){var x=shopList.items[+t.dataset.v];shopRes=x;shopList=null;state.scans=(state.scans||[]).filter(function(s){return s.code!==x.code;});state.scans.unshift(x);state.scans=state.scans.slice(0,30);save(true);renderCourses();window.scrollTo(0,0);return;}
   if(a==='hist'){shopRes=(state.scans||[]).filter(function(s){return s.code===t.dataset.v;})[0]||null;shopErr='';renderCourses();window.scrollTo(0,0);return;}
   if(a==='clear'){state.scans=[];shopRes=null;save(true);renderCourses();return;}
   if(a==='add'&&shopRes){
@@ -3709,6 +3721,51 @@ function unitName(f,k,n){var u=unitsOf(f);if(k==='pc'){var l=u.pc?u.pc[1]:'pièc
 function unitChips(k){return k==='pc'?[.5,1,2,3,4]:k==='cc'||k==='cs'?[1,2,3]:k==='ml'?[100,200,250,330,500]:[30,50,100,150,200,250];}
 function defUnit(f){var u=unitsOf(f);return u.pc?'pc':(u.ml?'ml':'g');}
 function qtyLabel(e){var bu=(e.uu&&e.uu.ml===1)?' ml':' g';if(!e.u||e.u==='g')return gq(e.q)+bu;if(e.u==='ml')return gq(e.uq)+' ml';var n=e.uq;return String(n).replace('.',',')+' '+(e.u==='pc'?(e.ul||'pièce')+(n>=2&&e.ul&&!/\(|s$/.test(e.ul)?'s':''):UNIT_LBL[e.u])+(e.u==='pc'&&/\(/.test(e.ul||'')?'':' ('+gq(e.q)+bu.trim().replace(/^/,' ')+')');}
+
+/* =====================================================
+   OPEN FOOD FACTS : la base collaborative partagée
+   Recherche par nom + lien pour ajouter un produit manquant
+   ===================================================== */
+var OFF_FIELDS='code,product_name,product_name_fr,brands,quantity,nutriments,nutriscore_grade,nova_group,serving_quantity,allergens_tags,ingredients_analysis_tags';
+function offToProd(p){
+  var n=p.nutriments||{},k=n2(n['energy-kcal_100g']);if(k===null&&n['energy_100g']!=null)k=Math.round(n2(n['energy_100g'])/4.184);
+  return {code:String(p.code||''),name:(p.product_name_fr||p.product_name||('Produit '+p.code)).trim(),brand:(p.brands||'').split(',')[0].trim(),qty:p.quantity||'',k:k,p:n2(n.proteins_100g)||0,g:n2(n.carbohydrates_100g)||0,l:n2(n.fat_100g)||0,fi:n2(n.fiber_100g)||0,
+    ags:n2(n['saturated-fat_100g']),suc:n2(n.sugars_100g),sel:n2(n.salt_100g),ns:(p.nutriscore_grade||'').toLowerCase(),nova:p.nova_group||null,serving:n2(p.serving_quantity),allergens:p.allergens_tags||[],analysis:p.ingredients_analysis_tags||[],d:today()};
+}
+function offSearch(q){
+  return fetch('https://fr.openfoodfacts.org/cgi/search.pl?search_terms='+encodeURIComponent(q)+'&search_simple=1&action=process&json=1&page_size=24&sort_by=unique_scans_n&fields='+OFF_FIELDS,{headers:{'Accept':'application/json'}})
+    .then(function(r){if(!r.ok)throw new Error('http');return r.json();})
+    .then(function(d){return (d.products||[]).map(offToProd).filter(function(x){return x.k!==null&&x.name;});});
+}
+function offAddLink(code){return '<a class="btn offadd" href="https://world.openfoodfacts.org/product/'+encodeURIComponent(code)+'" target="_blank" rel="noopener">Ajouter ce produit sur Open Food Facts</a><p class="small">Le plus simple : l\u2019appli gratuite Open Food Facts, en prenant l\u2019étiquette en photo. Une fois validé, le produit sera disponible pour tout le monde, dans Nodral aussi.</p>';}
+function foodFromProd(x){
+  var f=x.code?state.foods.filter(function(z){return z.ean===x.code;})[0]:null;if(f)return f;
+  f={id:uid(),name:x.name+(x.brand&&x.name.toLowerCase().indexOf(x.brand.toLowerCase())<0?' ('+x.brand+')':''),k:x.k,p:x.p,g:x.g,l:x.l,fi:x.fi,ags:x.ags,suc:x.suc,sel:x.sel,ean:x.code||null,ns:x.ns,serving:x.serving,src:'off',u:offUnits(x.serving,x.qty),uses:0,last:Date.now()};
+  state.foods.push(f);save(true);return f;
+}
+/* dans la fenêtre d'ajout d'aliment */
+function renderOffBox(){
+  var b=$('offBox');if(!b||!sh)return;var q=(sh.qtext||'').trim();
+  if(sh.offBusy){b.innerHTML='<p class="scanwait">Recherche dans Open Food Facts…</p>';return;}
+  if(sh.offErr){b.innerHTML='<div class="warn">'+sh.offErr+'</div>';return;}
+  if(sh.off){
+    b.innerHTML='<p class="offh">Open Food Facts : '+sh.off.length+' résultat'+(sh.off.length>1?'s':'')+' pour « '+esc(sh.offQ)+' »</p>'+(sh.off.length?'<ul class="flist">'+sh.off.map(function(x,i){return '<li><button type="button" data-act="offpick" data-v="'+i+'">'+esc(x.name)+(x.ns&&'abcde'.indexOf(x.ns)>-1&&x.ns.length===1?' <span class="ns ns-'+x.ns+' mini">'+x.ns.toUpperCase()+'</span>':'')+'<small>'+esc(x.brand||'')+(x.brand?' · ':'')+'Pour 100 g : '+nf(x.k)+' kcal, P '+gq(x.p)+' g, G '+gq(x.g)+' g, L '+gq(x.l)+' g</small></button></li>';}).join('')+'</ul>':'<p class="small">Rien trouvé. Essaie un autre mot, ou crée l\u2019aliment avec son étiquette.</p>')+
+      '<p class="small">Données Open Food Facts, base collaborative (licence ODbL).</p>';return;}
+  b.innerHTML=q.length>=3&&!/^\d+$/.test(q)?'<button class="btn offbtn" type="button" data-act="offsearch">Chercher « '+esc(q)+' » dans Open Food Facts</button>':'';
+}
+function offSearchAct(){
+  var q=(sh.qtext||'').trim();if(q.length<3)return;
+  sh.offBusy=true;sh.offErr='';sh.off=null;sh.offQ=q;renderOffBox();
+  offSearch(q).then(function(L){if(!sh)return;sh.offBusy=false;sh.off=L;renderOffBox();})
+    .catch(function(){if(!sh)return;sh.offBusy=false;sh.offErr='Recherche impossible pour l\u2019instant (pas de connexion, ou fonction disponible seulement dans l\u2019app installée).';renderOffBox();});
+}
+/* dans l'onglet Courses : recherche par nom */
+var shopList=null;
+function shopSearch(q){
+  shopBusy=true;shopErr='';shopRes=null;shopList=null;renderCourses();
+  offSearch(q).then(function(L){shopBusy=false;shopList={q:q,items:L};renderCourses();})
+    .catch(function(){shopBusy=false;shopErr='Recherche impossible pour l\u2019instant : vérifie ta connexion.';renderCourses();});
+}
 
 /* =====================================================
    VERSION INSTALLABLE (PWA)
